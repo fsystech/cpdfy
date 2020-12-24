@@ -1,5 +1,4 @@
 **/.vs
 **/node_modules/*
-**/Release/obj/*
-**/Release/*
+**/build/*
 !**/Release/html_pdf_c.node
