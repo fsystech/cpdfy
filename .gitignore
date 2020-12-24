@@ -1,0 +1,5 @@
+**/.vs
+**/node_modules/*
+**/Release/obj/*
+**/Release/*
+!**/Release/html_pdf_c.node

@@ -1,0 +1,29 @@
+{
+  "author": "Safe Online World Ltd.",
+  "name": "html-pdf-c-plus-plus",
+  "version": "0.0.1",
+  "description": "HTML string to PDF converter with wkhtmltopdf",
+  "main": "test.js",
+  "type": "commonjs",
+  "typings": "global.d.ts",
+  "scripts": {
+    "app": "node64 test.js",
+    "build:dev": "node-gyp build --debug",
+    "build": "node-gyp clean configure build --verbose --arch=x64",
+    "rebuild:dev": "node-gyp rebuild --debug",
+    "rebuild": "node-gyp rebuild",
+    "clean": "node-gyp clean"
+  },
+  "binary": {
+    "module_name": "html_pdf_c",
+    "module_path": "./lib/binding/{configuration}/{node_abi}-{platform}-{arch}/",
+    "remote_path": "./{module_name}/v{version}/{configuration}/",
+    "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
+    "host": "https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
+  },
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "nan": "^2.14.2"
+  }
+}
