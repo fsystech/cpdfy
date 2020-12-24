@@ -11,7 +11,7 @@ const pdfBuff = html2pdf.generate_pdf({}, `<!DOCTYPE html>
     <title>Test PDF</title>
 </head>
 <BODY>
-    Hello World
+    <h1 style="color:red;">Hello World</h1>
 </BODY>
 </html>
 `);
@@ -19,11 +19,9 @@ if (Buffer.isBuffer(pdfBuff)) {
     if(pdfBuff.length>10){
         require('fs').writeFileSync("./test.pdf", pdfBuff);
     }
-    console.log(pdfBuff.toString())
-    console.log("this is buffer...");
-} else {
     console.log("Success");
-    console.log(pdfBuff)
+}else{
+    console.log("No Response found..");
 }
 
 // call "D:\\Program Files\\nodejs\\node.exe" test.js

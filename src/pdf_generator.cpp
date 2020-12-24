@@ -19,10 +19,8 @@ pdf_ext::pdf_generator::pdf_generator() {
 	prepare_default_settings();
 }
 void pdf_ext::pdf_generator::set_status(int ret_val, const char * ret_msg) {
-	if (_msg != NULL) delete[]_msg;
-	//size_t len = strlen(ret_msg);
-	//_msg = new char[len + 1];
-	//strcpy_s(_msg, len, ret_msg);
+	_free_obj(_msg);
+	_msg = new std::string(ret_msg, strlen(ret_msg));
 	_status = ret_val;
 }
 void pdf_ext::pdf_generator::init_func() {
@@ -67,7 +65,8 @@ int pdf_ext::pdf_generator::init_wos() {
 	return _status;
 }
 const char * pdf_ext::pdf_generator::get_status_msg() {
-	return const_cast<const char*>(_msg);
+	if(_msg==NULL) return "success";
+	return _msg->c_str();
 }
 pdf_ext::pdf_generator::~pdf_generator() {
 	if (!_disposed)dispose();
@@ -276,7 +275,7 @@ int pdf_ext::pdf_generator::generate_from_url(const char * url, const char* outp
 
 void pdf_ext::pdf_generator::dispose() {
 	if (_disposed==FALSE) {
-		_free_char(_msg);
+		_free_obj(_msg);
 		_disposed = TRUE;
 		if (_converter != NULL) {
 			/* Destroy the converter object since we are done with it */

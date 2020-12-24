@@ -6,8 +6,7 @@
                 "${workspaceFolder}/**",
                 "./dependency/win/x64/wkhtmltopdf/include",
                 "C:/Users/Administrator/AppData/Local/node-gyp/Cache/14.12.0/include/node",
-                "${workspaceFolder}/node_modules/nan/",
-                "${workspaceFolder}/node_modules/streaming-worker-sdk/"
+                "${workspaceFolder}/node_modules/nan/"
             ],
             "defines": [
                 "_DEBUG",

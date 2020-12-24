@@ -28,7 +28,7 @@ namespace pdf_ext {
 	class pdf_generator {
 	private:
 		int _disposed;
-		char*_msg;
+		std::string*_msg;
 		int _status;
 		wkhtmltopdf_global_settings* _wgs;
 		wkhtmltopdf_object_settings* _wos;
