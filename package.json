@@ -3,10 +3,16 @@
   "name": "html-pdf-c-plus-plus",
   "version": "0.0.1",
   "description": "HTML string to PDF converter with wkhtmltopdf",
-  "main": "test.js",
+  "main": "index.js",
   "type": "commonjs",
   "typings": "global.d.ts",
+  "repository"   :  {
+    "type" : "git",
+    "url"  : "git://github.com/safeonlineworld/html-pdf-c-plus-plus.git"
+ },
   "scripts": {
+    "install": "node-pre-gyp install --fallback-to-build",
+    "test": "node test.js",
     "app": "node64 test.js",
     "build:dev": "node-gyp build --debug",
     "build": "node-gyp clean configure build --verbose --arch=x64",
@@ -19,11 +25,12 @@
     "module_path": "./lib/binding/{configuration}/{node_abi}-{platform}-{arch}/",
     "remote_path": "./{module_name}/v{version}/{configuration}/",
     "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
-    "host": "https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
+    "host": "https://github.com/safeonlineworld/html-pdf-c-plus-plus.git"
   },
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
-    "nan": "^2.14.2"
+    "nan": "^2.14.2",
+    "node-pre-gyp": "^0.17.0"
   }
 }
