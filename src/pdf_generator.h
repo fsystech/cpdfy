@@ -6,8 +6,9 @@
 * See the accompanying LICENSE file for terms.
 */
 #if defined(_MSC_VER)
-#pragma once
+#	pragma once
 #endif//!_MSC_VER
+
 #if !defined(_pdf_generator_h)
 #	define _pdf_generator_h
 #	include <wkhtmltox/pdf.h>
@@ -16,8 +17,10 @@
 #	include <string>
 #	include <sstream>
 
-#pragma warning (disable : 4231)
-#pragma warning(disable : 4996)
+#if defined(_MSC_VER)
+#	pragma warning (disable : 4231)
+#	pragma warning(disable : 4996)
+#endif//!_MSC_VER
 
 namespace pdf_ext {
 	/*[function pointers]*/
@@ -56,7 +59,7 @@ namespace pdf_ext {
 		pdf_generator();
 		pdf_generator(const pdf_generator&) = delete;
 		pdf_generator& operator=(const pdf_generator&) = delete;
-		~pdf_generator();
+		virtual ~pdf_generator();
 		const char* get_status_msg();
 		int init(int use_graphics);
 		int init(

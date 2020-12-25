@@ -39,7 +39,7 @@ namespace sow_html_to_pdf {
 	) {
 		out.clear( );
 		const char *str = v8_object_get_cc( isolate, ctx, v8_obj, prop );
-		if ( str == NULL )return NULL;
+		if ( str == NULL )return 0;
 		out = std::string( str );
 		return 1;
 	}

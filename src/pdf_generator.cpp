@@ -7,6 +7,7 @@
 */
 #	include "pdf_generator.h"
 #	include "default.h"
+#	include <cstring>
 pdf_ext::pdf_generator::pdf_generator() {
 	_status = -1; _disposed = FALSE; _msg = NULL;
 	_wgs = NULL; _wos = NULL; _converter = NULL;
