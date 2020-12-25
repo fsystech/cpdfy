@@ -20,12 +20,12 @@
                         'LINUX_OS',
                     ],
                     'include_dirs': [
-                        "./dependency/linux/wkhtmltopdf/include",
+                        "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltox/include',require('process').arch);\")",
                         "<!(node -e \"require('nan')\")"
                     ],
                     "link_settings": {
                         "libraries": [
-                            "../dependency/linux/wkhtmltopdf/lib/wkhtmltox.so",
+                            "<!(node -e \"console.log('../dependency/linux/%s/wkhtmltox/lib/libwkhtmltox.so',require('process').arch);\")"
                         ]
                     },
                 }],
@@ -49,13 +49,26 @@
             "target_name": "action_after_build",
             "type": "none",
             "dependencies": ["<(module_name)"],
-            "copies": [{
-                "files": [
-                    "<(PRODUCT_DIR)/<(module_name).node",
-                    "<!(node -e \"console.log('./dependency/win/%s/wkhtmltopdf/bin/wkhtmltox.dll',require('process').arch);\")"
-                ],
-                "destination": "<(module_path)"
-            }],
+            "conditions": [
+                ["OS=='linux'", {
+                    "copies": [{
+                        "files": [
+                            "<(PRODUCT_DIR)/<(module_name).node",
+                            "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltox/lib/libwkhtmltox.so',require('process').arch);\")"
+                        ],
+                        "destination": "<(module_path)"
+                    }]
+                }],
+                ['OS=="win"', {
+                    "copies": [{
+                        "files": [
+                            "<(PRODUCT_DIR)/<(module_name).node",
+                            "<!(node -e \"console.log('./dependency/win/%s/wkhtmltopdf/bin/wkhtmltox.dll',require('process').arch);\")"
+                        ],
+                        "destination": "<(module_path)"
+                    }]
+                }]
+            ]
         }
     ]
 }
