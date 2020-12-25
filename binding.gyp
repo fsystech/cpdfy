@@ -25,7 +25,7 @@
                     ],
                     "link_settings": {
                         "libraries": [
-                            "<!(node -e \"console.log('../dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so',require('process').arch);\")"
+                            "<!(node -e \"console.log('../dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0',require('process').arch);\")"
                         ]
                     },
                 }],
@@ -54,10 +54,13 @@
                     "copies": [{
                         "files": [
                             "<(PRODUCT_DIR)/<(module_name).node",
-                            "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0',require('process').arch);\")",
-                            "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0.12.6',require('process').arch);\")"
                         ],
                         "destination": "<(module_path)"
+                    },{
+                        "files": [
+                            "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0',require('process').arch);\")"
+                        ],
+                        "destination": "/usr/lib/"
                     }]
                 }],
                 ['OS=="win"', {
