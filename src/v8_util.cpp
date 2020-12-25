@@ -8,7 +8,7 @@
 #	include "v8_util.h"
 #	include <libplatform/v8-tracing.h>
 namespace sow_html_to_pdf {
-	bool sow_html_to_pdf::to_boolean(v8::Isolate* isolate, v8::Local<v8::Value> value) {
+	bool to_boolean(v8::Isolate* isolate, v8::Local<v8::Value> value) {
 #if V8_MAJOR_VERSION < 7 || (V8_MAJOR_VERSION == 7 && V8_MINOR_VERSION == 0)
 		/* Old */
 		return value->BooleanValue(isolate->GetCurrentContext()).ToChecked();
@@ -16,11 +16,11 @@ namespace sow_html_to_pdf {
 		return value->BooleanValue(isolate);
 #endif
 	}
-	const char* sow_html_to_pdf::to_char_str(const v8::String::Utf8Value& value) {
+	const char* to_char_str(const v8::String::Utf8Value& value) {
 		if (value.length() <= 0)return "";
 		return *value ? *value : "<string conversion failed>";
 	}
-	const char* sow_html_to_pdf::to_char_str(v8::Isolate* isolate, v8::Local<v8::Value> x) {
+	const char* to_char_str(v8::Isolate* isolate, v8::Local<v8::Value> x) {
 		v8::String::Utf8Value str(isolate, x);
 		return to_char_str(str);
 	}

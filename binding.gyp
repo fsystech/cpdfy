@@ -20,12 +20,12 @@
                         'LINUX_OS',
                     ],
                     'include_dirs': [
-                        "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltox/include',require('process').arch);\")",
+                        "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltopdf/include',require('process').arch);\")",
                         "<!(node -e \"require('nan')\")"
                     ],
                     "link_settings": {
                         "libraries": [
-                            "<!(node -e \"console.log('../dependency/linux/%s/wkhtmltox/lib/libwkhtmltox.so',require('process').arch);\")"
+                            "<!(node -e \"console.log('../dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so',require('process').arch);\")"
                         ]
                     },
                 }],
@@ -54,7 +54,7 @@
                     "copies": [{
                         "files": [
                             "<(PRODUCT_DIR)/<(module_name).node",
-                            "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltox/lib/libwkhtmltox.so',require('process').arch);\")"
+                            "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so',require('process').arch);\")"
                         ],
                         "destination": "<(module_path)"
                     }]
