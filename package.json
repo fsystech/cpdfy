@@ -5,7 +5,7 @@
   "description": "HTML string to PDF converter with wkhtmltopdf",
   "main": "index.js",
   "type": "commonjs",
-  "typings": "global.d.ts",
+  "typings": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/safeonlineworld/html-pdf-c-plus-plus.git"

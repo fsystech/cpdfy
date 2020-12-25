@@ -4,15 +4,16 @@ const platform = os.platform();
 const arch = os.arch();
 //if (platform !== 'win32' || arch !== 'ia32') throw new Error(`Not supported platform =>${platform} and arch => ${arch}`);
 console.log(`platform =>${platform} and arch => ${arch}`);
-const html2pdf = require('./build/Release/html_pdf_c').html_pdf_c;
+const {html2pdf} = require('./index');
 console.log(html2pdf);
-const pdfBuff = html2pdf.generate_pdf({}, `<!DOCTYPE html>
+
+const pdfBuff = html2pdf.generatePdf({}, `<!DOCTYPE html>
 <html lang="es">
 <head>
     <title>Test PDF</title>
 </head>
 <BODY>
-    <h1 style="color:red;">Hello World</h1>
+    <h1 style="color:red;">Hello World....</h1>
 </BODY>
 </html>
 `);
