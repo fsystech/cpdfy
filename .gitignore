@@ -1,4 +1,4 @@
 **/.vs
 **/node_modules/*
 **/build/*
-!**/Release/html_pdf_c.node
+**/lib/*

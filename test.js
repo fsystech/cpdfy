@@ -1,3 +1,4 @@
+console.log(require('process').arch);
 const os = require("os");
 const platform = os.platform();
 const arch = os.arch();

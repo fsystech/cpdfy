@@ -25,18 +25,18 @@
                     ],
                     "link_settings": {
                         "libraries": [
-                        "../dependency/linux/wkhtmltopdf/lib/wkhtmltox.so",
+                            "../dependency/linux/wkhtmltopdf/lib/wkhtmltox.so",
                         ]
                     },
                 }],
                 ['OS=="win"', {
                     "include_dirs": [
-                        "./dependency/win/x64/wkhtmltopdf/include",
+                        "<!(node -e \"console.log('./dependency/win/%s/wkhtmltopdf/include',require('process').arch);\")",
                         "<!(node -e \"require('nan')\")"
                     ],
                     "link_settings": {
                         "libraries": [
-                        "../dependency/win/x64/wkhtmltopdf/lib/wkhtmltox.lib",
+                            "<!(node -e \"console.log('../dependency/win/%s/wkhtmltopdf/lib/wkhtmltox.lib',require('process').arch);\")"
                         ]
                     },
                     "defines": [
@@ -44,6 +44,18 @@
                     ]
                 }]
             ]
+        },
+        {
+            "target_name": "action_after_build",
+            "type": "none",
+            "dependencies": ["<(module_name)"],
+            "copies": [{
+                "files": [
+                    "<(PRODUCT_DIR)/<(module_name).node",
+                    "<!(node -e \"console.log('./dependency/win/%s/wkhtmltopdf/bin/wkhtmltox.dll',require('process').arch);\")"
+                ],
+                "destination": "<(module_path)"
+            }],
         }
     ]
 }
