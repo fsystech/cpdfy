@@ -84,4 +84,5 @@ class html2pdf {
         });
     }
 };
-module.exports = html2pdf;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.html2pdf = html2pdf;
