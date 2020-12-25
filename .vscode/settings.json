@@ -57,7 +57,8 @@
         "deque": "cpp",
         "mutex": "cpp",
         "queue": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "*.inc": "cpp"
     },
     "files.watcherExclude": {
         "**/target": true

@@ -7,7 +7,7 @@
             "sources": [
                 "./src/v8_util.cpp", "./src/addon.cc", "./src/pdf_generator.cpp", "./src/wj_pdf.cpp"
             ],
-            'defines': ['NAPI_DISABLE_CPP_EXCEPTIONS'],
+            'defines': ['NAPI_DISABLE_CPP_EXCEPTIONS', 'BUILDING_WKHTMLTOX'],
             "msvs_settings": {
                 "VCCLCompilerTool": {
                     "ExceptionHandling": 1
