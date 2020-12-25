@@ -6,7 +6,7 @@
 */
 //By Rajib Chy
 // On 12:25 PM 12/25/2020
-declare interface IPdfConfig {
+export interface IPdfConfig {
     global_settings?: {
         documentTitle?: string;
         size?: { paperSize?: string };
@@ -51,7 +51,7 @@ declare interface IPdfConfig {
         };
     };
 }
-declare interface html2pdf {
+export interface html2pdf {
     generatePdf(config: IPdfConfig, htmlStr: string): Buffer;
     generatePdf(htmlStr: string): Buffer;
     generatePdfAsync(config: IPdfConfig, htmlStr: string): Promise<Buffer>;

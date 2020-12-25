@@ -4,7 +4,7 @@ const platform = os.platform();
 const arch = os.arch();
 //if (platform !== 'win32' || arch !== 'ia32') throw new Error(`Not supported platform =>${platform} and arch => ${arch}`);
 console.log(`platform =>${platform} and arch => ${arch}`);
-const {html2pdf} = require('./index');
+const { html2pdf } = require('./index');
 console.log(html2pdf);
 
 const pdfBuff = html2pdf.generatePdf({}, `<!DOCTYPE html>
@@ -18,11 +18,11 @@ const pdfBuff = html2pdf.generatePdf({}, `<!DOCTYPE html>
 </html>
 `);
 if (Buffer.isBuffer(pdfBuff)) {
-    if(pdfBuff.length>10){
+    if (pdfBuff.length > 10) {
         require('fs').writeFileSync("./test.pdf", pdfBuff);
     }
     console.log("Success");
-}else{
+} else {
     console.log("No Response found..");
 }
 

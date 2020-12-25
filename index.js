@@ -1,3 +1,4 @@
+// @ts-check
 /**
 * Copyright (c) 2018, SOW (https://www.safeonline.world). (https://github.com/RKTUXYN) All rights reserved.
 * @author {SOW}
@@ -44,31 +45,32 @@ const defaultConfig = {
         "footer.spacing": "0"
     }
 };
+function parseConfig(obj, outObj){
+    for (let prop in obj) {
+        let next = obj[prop];
+        if (!next && typeof (next) === "object") {
+            for (let nprop in next) {
+                outObj[`${prop}.${nprop}`] = String(next[nprop]);
+            }
+        }else{
+            outObj[prop] = String(next);
+        }
+    }
+}
 /**
  * Create PDF Config
- * @param {IPdfConfig} config
+ * @param {import('./index').IPdfConfig} config
  * @returns {NodeJS.Dict<any>}
  */
 function prepareConfig(config) {
     let outConfig = {};
     if (config.global_settings) {
         outConfig.global_settings = {};
-        for (let prop in config.global_settings) {
-            let next = config[prop];
-            if (!next && typeof (next) === "object") {
-                for (let nprop in next) {
-                    outConfig.global_settings[`${prop}.${nprop}`] = String(next[nprop]);
-                }
-            }else{
-                outConfig.global_settings[prop] = String(next);
-            }
-        }
+        parseConfig(config.global_settings, outConfig.global_settings);
     }
     if (config.object_settings) {
         outConfig.object_settings = {};
-        for (let prop in config.object_settings) {
-            let next = config[prop];
-        }
+        parseConfig(config.object_settings, outConfig.object_settings);
     }
     return outConfig
 }
@@ -82,4 +84,4 @@ class html2pdf {
         });
     }
 };
-module.exports.html2pdf = html2pdf;
+module.exports = html2pdf;
