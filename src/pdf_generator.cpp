@@ -8,6 +8,9 @@
 #	include "pdf_generator.h"
 #	include "default.h"
 #	include <cstring>
+
+int is_wkhtmltopdf_init = FALSE;
+
 pdf_ext::pdf_generator::pdf_generator() {
 	_status = -1; _disposed = FALSE; _msg = NULL;
 	_wgs = NULL; _wos = NULL; _converter = NULL;
@@ -118,10 +121,12 @@ int pdf_ext::pdf_generator::init(
 	std::map<std::string, std::string>& wos_settings
 ) {
 	_status = -1;
-	if (wkhtmltopdf_init(use_graphics) != 1) {
-		_disposed = TRUE;
-		set_status(_status, "PDF Engine init failed!!!");
-		return -1;
+	if(is_wkhtmltopdf_init == FALSE){
+		is_wkhtmltopdf_init = TRUE;
+		if (wkhtmltopdf_init(use_graphics) != 1) {
+			set_status(_status, "PDF Engine init failed!!!");
+			return -1;
+		}
 	}
 	_wgs = wkhtmltopdf_create_global_settings();
 	_wos = wkhtmltopdf_create_object_settings();
@@ -151,7 +156,6 @@ int pdf_ext::pdf_generator::init(
 	_status = 1;
 	return _status;
 }
-
 int pdf_ext::pdf_generator::generate(const char * html, std::string& str_output) {
 	if (_status < 0) {
 		set_status (-1, "Not initialized!");
@@ -171,33 +175,9 @@ int pdf_ext::pdf_generator::generate(const char * html, std::string& str_output)
 	const unsigned char *data = NULL;
 	long len = wkhtmltopdf_get_output(_converter, &data);
 	str_output = std::string(reinterpret_cast<const char*>(data), len);
+	//delete[]data;
 	data = NULL;
 	set_status (1, "Success");
-	return static_cast<int>(len);
-}
-int pdf_ext::pdf_generator::generate(std::stringstream& in_out_stream){
-	if (_status < 0) {
-		set_status(-1, "Not initialized!");
-		return _status;
-	}
-	init_wgs(); init_wos();
-	_converter = wkhtmltopdf_create_converter(_wgs);
-	init_func();
-	wkhtmltopdf_add_object(_converter, _wos, in_out_stream.str().c_str());
-	swap_obj(in_out_stream);
-	_disposed = FALSE;
-	// Perform the conversion
-	if (!wkhtmltopdf_convert(_converter)) {
-		/* Output possible http error code encountered */
-		set_status(-1, "PDF Conversion failed!");
-		dispose();
-		return _status;
-	}
-	const unsigned char* data = NULL;
-	long len = wkhtmltopdf_get_output(_converter, &data);
-	in_out_stream.write(reinterpret_cast<const char*>(data), len);
-	data = NULL;
-	set_status(1, "Success");
 	return static_cast<int>(len);
 }
 int pdf_ext::pdf_generator::generate_to_path(const char * html, const char * output_path) {
@@ -272,10 +252,6 @@ void pdf_ext::pdf_generator::dispose() {
 	if (_disposed==FALSE) {
 		_free_obj(_msg);
 		_disposed = TRUE;
-		if (_converter != NULL) {
-			/* Destroy the converter object since we are done with it */
-			wkhtmltopdf_destroy_converter(_converter);
-		}
 		if (_wgs != NULL) {
 			/* Destroy the global settings since we are done with it */
 			wkhtmltopdf_destroy_global_settings(_wgs); _wgs = NULL;
@@ -285,6 +261,11 @@ void pdf_ext::pdf_generator::dispose() {
 			wkhtmltopdf_destroy_object_settings(_wos); _wos = NULL;
 		}
 		_free_obj(_wgs_settings); _free_obj(_wos_settings);
+		if (_converter != NULL) {
+			/* Destroy the converter object since we are done with it */
+			wkhtmltopdf_destroy_converter(_converter); _converter = NULL;
+		}
+		//wkhtmltopdf_deinit();
 	}
 };
 /*void finished(wkhtmltopdf_converter* converter, int p) {

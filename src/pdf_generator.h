@@ -68,8 +68,6 @@ namespace pdf_ext {
 			std::map<std::string, std::string>&wos_settings
 		);
 		int generate(const char*html, std::string& str_output);
-		//template<typename _in_stream, typename _out_stream>
-		int generate(std::stringstream& in_out_stream);
 		int generate_to_path(const char*html, const char* output_path);
 		int generate_from_url(const char*url, std::string& str_output);
 		int generate_from_url(const char*url, const char* output_path);

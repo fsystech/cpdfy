@@ -8,9 +8,9 @@
         "type": "cppvsdbg",
         "request": "launch",
         "preLaunchTask": "npm: build:dev",
-        "program": "D:\\Program Files\\nodejs\\node64.exe",
+        "program": "C:\\Program Files\\nodejs\\node.exe",
         "cwd": "${workspaceFolder}",
-        "environment": [],
+        "environment": [{"name": "LUNCH_MODE", "value": "DEBUG"}],
         "stopAtEntry": false,
         "externalConsole": false,
         "args": [

@@ -7,10 +7,21 @@
 */
 //By Rajib Chy
 // On 11:00 AM 12/25/2020
-const binary = require('node-pre-gyp');
 const path = require('path');
-const binding_path = binary.find(path.resolve(path.join(__dirname, './package.json')));
-const nativeHtml2pdf = require(binding_path).html_pdf_c;
+/**
+ * Import PDF Native Module
+ * @returns {import('./index').html2pdf_native}
+ */
+function import_module() {
+    let binding_path;
+    if (process.env.LUNCH_MODE === "DEBUG") {
+        binding_path = "./build/Release/html_pdf_c.node";
+    } else {
+        binding_path = require('node-pre-gyp').find(path.resolve(path.join(__dirname, './package.json')));
+    }
+    return require(binding_path).html_pdf_c;
+}
+const nativeHtml2pdf = import_module();
 const defaultConfig = {
     global_settings: {
         "documentTitle": "Hello World",
@@ -45,24 +56,31 @@ const defaultConfig = {
         "footer.spacing": "0"
     }
 };
-function parseConfig(obj, outObj){
+function parseConfig(obj, outObj) {
     for (let prop in obj) {
         let next = obj[prop];
         if (!next && typeof (next) === "object") {
             for (let nprop in next) {
                 outObj[`${prop}.${nprop}`] = String(next[nprop]);
             }
-        }else{
+        } else {
             outObj[prop] = String(next);
         }
     }
 }
 /**
+ * 
+ * @typedef {import('./index').IPdfConfig} IPdfConfig
+ */
+
+
+/**
  * Create PDF Config
- * @param {import('./index').IPdfConfig} config
+ * @param {IPdfConfig} config
  * @returns {NodeJS.Dict<any>}
  */
 function prepareConfig(config) {
+    /** @type {IPdfConfig} */
     let outConfig = {};
     if (config.global_settings) {
         outConfig.global_settings = {};
@@ -72,9 +90,17 @@ function prepareConfig(config) {
         outConfig.object_settings = {};
         parseConfig(config.object_settings, outConfig.object_settings);
     }
+    outConfig.from_path = config.from_path || undefined;
+    outConfig.from_url = config.from_url || undefined;
+    outConfig.out_path = config.out_path || undefined;
     return outConfig
 }
 class html2pdf {
+    /**
+     * Generate PDF
+     * @param {import('./index').IPdfConfig} config 
+     * @param {string|void} htmlStr 
+     */
     static generatePdf(config, htmlStr) {
         return nativeHtml2pdf.generate_pdf(prepareConfig(config), htmlStr);
     }

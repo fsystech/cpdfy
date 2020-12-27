@@ -11,7 +11,7 @@
 #	define FALSE 0
 #endif// !FALSE
 #if !defined(TRUE)
-#	define TRUE 0
+#	define TRUE 1
 #endif// !TRUE
 #if !defined(_free_obj)
 #define _free_obj(obj)                  \

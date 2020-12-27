@@ -7,6 +7,12 @@
 //By Rajib Chy
 // On 12:25 PM 12/25/2020
 export interface IPdfConfig {
+    /** Full url e.g. https://www.safeonline.world */
+    from_url?: string;
+    /** should be absolute path */
+    out_path?: string;
+    /** Absolute local file path */
+    from_path?: string;
     global_settings?: {
         documentTitle?: string;
         size?: { paperSize?: string };
@@ -15,7 +21,7 @@ export interface IPdfConfig {
         dpi?: number;
         imageDPI?: number;
         imageQuality?: number;
-        margin: {
+        margin?: {
             top?: string;
             bottom?: string;
             left?: string;
@@ -50,6 +56,10 @@ export interface IPdfConfig {
             spacing?: number;
         };
     };
+}
+export interface html2pdf_native {
+    generate_pdf(...args: any[]): any;
+    get_http_header(): NodeJS.Dict<string>;
 }
 export interface html2pdf {
     generatePdf(config: IPdfConfig, htmlStr: string): Buffer;
