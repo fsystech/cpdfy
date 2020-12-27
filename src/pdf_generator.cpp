@@ -66,7 +66,7 @@ int pdf_ext::pdf_generator::init_wos() {
 	return _status;
 }
 const char * pdf_ext::pdf_generator::get_status_msg() {
-	if(_msg==NULL) return "success";
+	if(_msg==NULL) return "NO_MSG_FOUND";
 	return _msg->c_str();
 }
 pdf_ext::pdf_generator::~pdf_generator() {
@@ -92,7 +92,6 @@ void pdf_ext::pdf_generator::prepare_default_settings() {
 int pdf_ext::pdf_generator::init(int use_graphics) {
 	_status = -1;
 	if (wkhtmltopdf_init(use_graphics) != 1) {
-		//printf("Init failed");
 		_disposed = TRUE;
 		set_status(_status, "PDF Engine init failed!!!");
 		return -1;
@@ -149,7 +148,6 @@ int pdf_ext::pdf_generator::init(
 			};
 		}
 	}
-	
 	_status = 1;
 	return _status;
 }
@@ -162,13 +160,13 @@ int pdf_ext::pdf_generator::generate(const char * html, std::string& str_output)
 	init_wgs(); init_wos();
 	_converter = wkhtmltopdf_create_converter(_wgs);
 	wkhtmltopdf_add_object(_converter, _wos, html);
+	//printf("%s",html);printf("%s","\r\n");
 	init_func();
 	_disposed = FALSE;
 	// Perform the conversion
 	if (!wkhtmltopdf_convert(_converter)) {
 		/* Output possible http error code encountered */
 		set_status (-1, "PDF Conversion failed!");
-		dispose();
 		return _status;
 	}
 	const unsigned char *data = NULL;
@@ -240,7 +238,6 @@ int pdf_ext::pdf_generator::generate_from_url(const char * url, std::string& str
 	if (!wkhtmltopdf_convert(_converter)) {
 		/* Output possible http error code encountered */
 		set_status (-1, "PDF Conversion failed!");
-		dispose();
 		return _status;
 	}
 	const unsigned char *data = NULL;

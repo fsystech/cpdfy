@@ -21,9 +21,7 @@ void v8_object_loop(v8::Isolate* isolate, const v8::Local<v8::Object>v8_obj, std
 		v8::Local<v8::Value> value = v8_obj->Get(ctx, key).ToLocalChecked();
 		if (value->IsNullOrUndefined())continue;
 		if (key->IsString() && value->IsString()) {
-			const char* native_key = to_char_str(isolate, key);
-			const char* native_value= to_char_str(isolate, value);
-			out_put[std::string(native_key)] = std::string(native_value);
+			out_put[to_cstr(isolate, key)] = to_cstr(isolate, value);
 		}
 	}
 }
@@ -59,24 +57,21 @@ void generate_pdf(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	config.Clear();
 	int rec = pdf_gen->init(true, *wgs_settings, *wos_settings);
 	_free_obj(wgs_settings); _free_obj(wos_settings);
-	std::stringstream body_stream(to_char_str(isolate, args[1]));
+	std::string output;
 	if (rec < 0) {
-		body_stream << pdf_gen->get_status_msg();
+		output = std::string(pdf_gen->get_status_msg());
 		pdf_gen->dispose();
 		delete pdf_gen;
 	}else{
-		rec = pdf_gen->generate(body_stream);
-		if (rec < 0) {
-			body_stream << pdf_gen->get_status_msg();
+		std::string cc_string = to_cstr(isolate, args[1]);
+		rec = pdf_gen->generate(cc_string.c_str(), output);
+		if (rec < 0 && output.length() == 0) {
+			output = std::string(pdf_gen->get_status_msg());
 		}
 		pdf_gen->dispose();
 		delete pdf_gen;
 	}
-	std::string* byte_char = new std::string(body_stream.str());
-	body_stream.clear(); std::stringstream().swap(body_stream);
-	args.GetReturnValue().Set(Nan::CopyBuffer(byte_char->c_str(), byte_char->length()).ToLocalChecked());
-	//args.GetReturnValue().Set(v8_str(isolate, byte_char->c_str()));
-	//std::cout << byte_char->c_str() << std::endl;
-	_free_obj(byte_char);
+	args.GetReturnValue().Set(Nan::CopyBuffer(output.c_str(), output.length()).ToLocalChecked());
+	swap_obj(output);
 	return;
 }

@@ -7,6 +7,7 @@
 //6:24 PM 1/22/2019
 #	include "v8_util.h"
 #	include <libplatform/v8-tracing.h>
+#	include <nan.h>
 namespace sow_html_to_pdf {
 	bool to_boolean(v8::Isolate* isolate, v8::Local<v8::Value> value) {
 #if V8_MAJOR_VERSION < 7 || (V8_MAJOR_VERSION == 7 && V8_MINOR_VERSION == 0)
@@ -20,8 +21,13 @@ namespace sow_html_to_pdf {
 		if (value.length() <= 0)return "";
 		return *value ? *value : "<string conversion failed>";
 	}
+	std::string to_cstr(v8::Isolate*isolate, v8::Local<v8::Value>val){
+		v8::String::Utf8Value str(isolate, val);
+		return std::string(*str);
+	}
 	const char* to_char_str(v8::Isolate* isolate, v8::Local<v8::Value> x) {
-		v8::String::Utf8Value str(isolate, x);
+		v8::Local<v8::String> val = Nan::To<v8::String>(x).ToLocalChecked();
+		v8::String::Utf8Value str(isolate, val);
 		return to_char_str(str);
 	}
 	const char* v8_object_get_cc(

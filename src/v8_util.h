@@ -27,6 +27,7 @@
 
 namespace sow_html_to_pdf {
 	bool to_boolean(v8::Isolate* isolate, v8::Local<v8::Value> value);
+	std::string to_cstr(v8::Isolate*isolate, v8::Local<v8::Value>val);
 	const char* to_char_str(const v8::String::Utf8Value& value);
 	const char* to_char_str(v8::Isolate* isolate, v8::Local<v8::Value> x);
 	const char *v8_object_get_cc(
