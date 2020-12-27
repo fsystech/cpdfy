@@ -9,8 +9,12 @@
 #	include "default.h"
 #	include <cstring>
 
-int is_wkhtmltopdf_init = FALSE;
-
+int _is_wkhtmltopdf_init = FALSE;
+void destroy_wkhtmltopdf(){
+	if (_is_wkhtmltopdf_init == TRUE)
+	wkhtmltopdf_deinit();
+	_is_wkhtmltopdf_init = FALSE;
+}
 pdf_ext::pdf_generator::pdf_generator() {
 	_status = -1; _disposed = FALSE; _msg = NULL;
 	_wgs = NULL; _wos = NULL; _converter = NULL;
@@ -94,10 +98,13 @@ void pdf_ext::pdf_generator::prepare_default_settings() {
 }
 int pdf_ext::pdf_generator::init(int use_graphics) {
 	_status = -1;
-	if (wkhtmltopdf_init(use_graphics) != 1) {
-		_disposed = TRUE;
-		set_status(_status, "PDF Engine init failed!!!");
-		return -1;
+	if( _is_wkhtmltopdf_init == FALSE ) {
+		if (wkhtmltopdf_init(use_graphics) != 1) {
+			_disposed = TRUE;
+			set_status(_status, "PDF Engine init failed!!!");
+			return -1;
+		}
+		_is_wkhtmltopdf_init = TRUE;
 	}
 	_wgs = wkhtmltopdf_create_global_settings();
 	_wos = wkhtmltopdf_create_object_settings();
@@ -121,12 +128,12 @@ int pdf_ext::pdf_generator::init(
 	std::map<std::string, std::string>& wos_settings
 ) {
 	_status = -1;
-	if(is_wkhtmltopdf_init == FALSE){
-		is_wkhtmltopdf_init = TRUE;
+	if( _is_wkhtmltopdf_init == FALSE ) {
 		if (wkhtmltopdf_init(use_graphics) != 1) {
 			set_status(_status, "PDF Engine init failed!!!");
 			return -1;
 		}
+		_is_wkhtmltopdf_init = FALSE;
 	}
 	_wgs = wkhtmltopdf_create_global_settings();
 	_wos = wkhtmltopdf_create_object_settings();
@@ -249,10 +256,10 @@ int pdf_ext::pdf_generator::generate_from_url(const char * url, const char* outp
 }
 
 void pdf_ext::pdf_generator::dispose() {
-	if (_disposed==FALSE) {
+	if ( _disposed == FALSE ) {
 		_free_obj(_msg);
 		_disposed = TRUE;
-		if (_wgs != NULL) {
+		if ( _wgs != NULL ) {
 			/* Destroy the global settings since we are done with it */
 			wkhtmltopdf_destroy_global_settings(_wgs); _wgs = NULL;
 		}

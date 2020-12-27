@@ -24,6 +24,10 @@ async function test() {
     </html>
     `;
     await sleep(1000);
+    console.log(os.tmpdir());
+    const fst = fs.createWriteStream(path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+    html2pdf.createStram({}, html).pipe(fst);
+    return;
     for (let i = 0; i < 100; i++) {
         const result = html2pdf.generatePdf({ out_path: path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`) }, html);
         console.log(`Result ${result}=>${i + 1}`);

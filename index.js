@@ -7,7 +7,12 @@
 */
 //By Rajib Chy
 // On 11:00 AM 12/25/2020
+/** 
+ * @typedef {import('./index').IPdfConfig} IPdfConfig
+ */
 const path = require('path');
+const os = require("os");
+const fs = require('fs');
 /**
  * Import PDF Native Module
  * @returns {import('./index').html2pdf_native}
@@ -22,7 +27,7 @@ function import_module() {
     return require(binding_path).html_pdf_c;
 }
 const nativeHtml2pdf = import_module();
-const defaultConfig = {
+/*const defaultConfig = {
     global_settings: {
         "documentTitle": "Hello World",
         "size.paperSize": "A4",
@@ -55,7 +60,7 @@ const defaultConfig = {
         "footer.line": "false",
         "footer.spacing": "0"
     }
-};
+};*/
 function parseConfig(obj, outObj) {
     for (let prop in obj) {
         let next = obj[prop];
@@ -68,16 +73,10 @@ function parseConfig(obj, outObj) {
         }
     }
 }
-/**
- * 
- * @typedef {import('./index').IPdfConfig} IPdfConfig
- */
-
 
 /**
  * Create PDF Config
  * @param {IPdfConfig} config
- * @returns {NodeJS.Dict<any>}
  */
 function prepareConfig(config) {
     /** @type {IPdfConfig} */
@@ -93,23 +92,49 @@ function prepareConfig(config) {
     outConfig.from_path = config.from_path || undefined;
     outConfig.from_url = config.from_url || undefined;
     outConfig.out_path = config.out_path || undefined;
-    return outConfig
+    for (let prop in outConfig) {
+        config[prop] = outConfig[prop];
+    }
 }
 class html2pdf {
     /**
      * Generate PDF
-     * @param {import('./index').IPdfConfig} config 
+     * @param {IPdfConfig} config 
      * @param {string|void} htmlStr 
      */
     static generatePdf(config, htmlStr) {
-        return nativeHtml2pdf.generate_pdf(prepareConfig(config), htmlStr);
+        prepareConfig(config);
+        return nativeHtml2pdf.generate_pdf(config, htmlStr);
     }
     static getHttpHeader() {
         return nativeHtml2pdf.get_http_header();
     }
+    /**
+     * 
+     * @param {IPdfConfig} config 
+     * @param {string} htmlStr
+     * @returns {fs.ReadStream} 
+     */
+    static createStram(config, htmlStr) {
+        prepareConfig(config);
+        config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
+        nativeHtml2pdf.generate_pdf(config, htmlStr);
+        const stream = fs.createReadStream(config.out_path);
+        stream.on("close", () => {
+            fs.stat(config.out_path, (err, state) => {
+                if(state){
+                    fs.rm(config.out_path, (err) => {
+                        // No need to verify this result
+                    });
+                }
+            });
+        });
+        return stream;
+    }
     static generatePdfAsync(config, htmlStr) {
         return new Promise((reject, reslove) => {
-            reslove(nativeHtml2pdf.generate_pdf(prepareConfig(config), htmlStr));
+            prepareConfig(config);
+            reslove(nativeHtml2pdf.generate_pdf(config, htmlStr));
         });
     }
 };

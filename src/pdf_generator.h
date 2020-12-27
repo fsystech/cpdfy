@@ -22,6 +22,9 @@
 #	pragma warning(disable : 4996)
 #endif//!_MSC_VER
 
+/** if `wkhtmltopdf_init()` invoked then it will be deinit */
+void destroy_wkhtmltopdf();
+
 namespace pdf_ext {
 	/*[function pointers]*/
 	typedef void (*pdf_ext_func)(wkhtmltopdf_converter*, int);
