@@ -68,13 +68,18 @@ void generate_pdf(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	}else{
 		std::string cc_string = to_cstr(isolate, args[1]);
 		rec = pdf_gen->generate(cc_string.c_str(), output);
+		swap_obj(cc_string);
 		if (rec < 0 && output.length() == 0) {
 			output = std::string(pdf_gen->get_status_msg());
 		}
 		pdf_gen->dispose();
 		delete pdf_gen;
 	}
-	args.GetReturnValue().Set(Nan::CopyBuffer(output.c_str(), output.length()).ToLocalChecked());
+	if( rec <0 ){
+		args.GetReturnValue().Set(v8_str(isolate, output.c_str()));
+	} else{
+		args.GetReturnValue().Set(Nan::CopyBuffer(output.c_str(), output.length()).ToLocalChecked());
+	}
 	swap_obj(output);
 	return;
 }
