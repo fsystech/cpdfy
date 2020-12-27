@@ -10,8 +10,11 @@
 #	include <map>
 #	include "v8_util.h"
 #	include <nan.h>
-using namespace sow_html_to_pdf;
 
+std::string to_cstr(v8::Isolate*isolate, v8::Local<v8::Value>val){
+	v8::String::Utf8Value str(isolate, val);
+	return std::string(*str);
+}
 void v8_object_loop(v8::Isolate* isolate, const v8::Local<v8::Object>v8_obj, std::map<std::string, std::string>& out_put) {
 	v8::Local<v8::Context>ctx = isolate->GetCurrentContext();
 	v8::Local<v8::Array> property_names = v8_obj->GetOwnPropertyNames(ctx).ToLocalChecked();

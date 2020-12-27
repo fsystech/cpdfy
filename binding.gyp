@@ -5,7 +5,7 @@
             "cflags!": ["-fno-exceptions"],
             "cflags_cc!": ["-fno-exceptions"],
             "sources": [
-                "./src/v8_util.cpp", "./src/addon.cc", "./src/pdf_generator.cpp", "./src/wj_pdf.cpp"
+                "./src/addon.cc", "./src/pdf_generator.cpp", "./src/wj_pdf.cpp"
             ],
             'defines': ['NAPI_DISABLE_CPP_EXCEPTIONS', 'BUILDING_WKHTMLTOX'],
             "msvs_settings": {
