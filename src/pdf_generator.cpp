@@ -160,7 +160,6 @@ int pdf_ext::pdf_generator::generate(const char * html, std::string& str_output)
 	init_wgs(); init_wos();
 	_converter = wkhtmltopdf_create_converter(_wgs);
 	wkhtmltopdf_add_object(_converter, _wos, html);
-	//printf("%s",html);printf("%s","\r\n");
 	init_func();
 	_disposed = FALSE;
 	// Perform the conversion
@@ -216,7 +215,6 @@ int pdf_ext::pdf_generator::generate_to_path(const char * html, const char * out
 	if (!wkhtmltopdf_convert(_converter)) {
 		/* Output possible http error code encountered */
 		set_status (-1, "PDF Conversion failed!");
-		dispose();
 		return _status;
 	}
 	set_status (1, "Success");
@@ -264,7 +262,6 @@ int pdf_ext::pdf_generator::generate_from_url(const char * url, const char* outp
 	if (!wkhtmltopdf_convert(_converter)) {
 		/* Output possible http error code encountered */
 		set_status (-1, "PDF Conversion failed!");
-		dispose();
 		return _status;
 	}
 	set_status (1, "Success");

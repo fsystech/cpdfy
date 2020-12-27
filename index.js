@@ -78,6 +78,9 @@ class html2pdf {
     static generatePdf(config, htmlStr) {
         return nativeHtml2pdf.generate_pdf(prepareConfig(config), htmlStr);
     }
+    static getHttpHeader() {
+        return nativeHtml2pdf.get_http_header();
+    }
     static generatePdfAsync(config, htmlStr) {
         return new Promise((reject, reslove) => {
             reslove(nativeHtml2pdf.generate_pdf(prepareConfig(config), htmlStr));

@@ -58,7 +58,7 @@ void generate_pdf(const v8::FunctionCallbackInfo<v8::Value>& args) {
 		v8_object_settings_object.Clear();
 	}
 	config.Clear();
-	int rec = pdf_gen->init(true, *wgs_settings, *wos_settings);
+	int rec = pdf_gen->init(FALSE, *wgs_settings, *wos_settings);
 	_free_obj(wgs_settings); _free_obj(wos_settings);
 	std::string output;
 	if (rec < 0) {
@@ -69,8 +69,11 @@ void generate_pdf(const v8::FunctionCallbackInfo<v8::Value>& args) {
 		std::string cc_string = to_cstr(isolate, args[1]);
 		rec = pdf_gen->generate(cc_string.c_str(), output);
 		swap_obj(cc_string);
-		if (rec < 0 && output.length() == 0) {
+		if (rec < 0) {
 			output = std::string(pdf_gen->get_status_msg());
+		}else if(output.length() == 0){
+			rec = -1;
+			output = std::string("NO_OUTPUT_DATA_FOUND");
 		}
 		pdf_gen->dispose();
 		delete pdf_gen;
@@ -82,4 +85,13 @@ void generate_pdf(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	}
 	swap_obj(output);
 	return;
+}
+void get_http_header(const v8::FunctionCallbackInfo<v8::Value>& args) {
+	v8::Isolate* isolate = args.GetIsolate();
+	v8::Local<v8::Context> context = isolate->GetCurrentContext( );
+	v8::Local<v8::Object> header = v8::Object::New( isolate );
+	header->Set( context, v8_str( isolate, "x-wkhtmltopdf-version" ), v8_str(isolate, wkhtmltopdf_version()) ).ToChecked();
+	header->Set( context, v8_str( isolate, "accept-ranges" ), v8_str(isolate, "bytes") ).ToChecked();
+	header->Set( context, v8_str( isolate, "content-type" ), v8_str(isolate, "application/pdf") ).ToChecked();
+	args.GetReturnValue().Set(header);
 }

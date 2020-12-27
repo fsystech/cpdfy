@@ -24,10 +24,8 @@ void Initialize( v8::Local<v8::Object> exports ) {
     // per-addon-instance data we created above by passing `external` as the
     // third parameter to the `FunctionTemplate` constructor.
     SET_NATIVE_METHOD( app, isolate, "generate_pdf", generate_pdf, context );
-    bool status = exports->Set( context, v8_str( isolate, "html_pdf_c" ), app ).ToChecked();
-    if(status == false){
-        throw_js_error(isolate, "Unable to create addon.");
-    }
+    SET_NATIVE_METHOD( app, isolate, "get_http_header", get_http_header, context );
+    exports->Set( context, v8_str( isolate, "html_pdf_c" ), app ).ToChecked();
 }
 
 NODE_MODULE( html_pdf_c, Initialize )

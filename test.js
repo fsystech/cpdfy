@@ -5,7 +5,7 @@ const arch = os.arch();
 //if (platform !== 'win32' || arch !== 'ia32') throw new Error(`Not supported platform =>${platform} and arch => ${arch}`);
 console.log(`platform =>${platform} and arch => ${arch}`);
 const { html2pdf } = require('./index');
-console.log(html2pdf);
+console.log(html2pdf.getHttpHeader());
 
 const pdfBuff = html2pdf.generatePdf({}, `<!DOCTYPE html>
 <html lang="es">
