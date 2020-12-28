@@ -229,17 +229,13 @@ class html2pdf {
             html2pdf.createStream(config, htmlStr, (err, stream) => {
                 if (err) return reject(err);
                 return reslove(stream);
-            })
+            });
         });
     }
     static generatePdfAsync(config, htmlStr) {
-        if (typeof (config) === "string") {
-            htmlStr = config; config = {};
-        }
         return new Promise((reject, reslove) => {
-            prepareConfig(config);
             try {
-                return reslove(nativeHtml2pdf.generate_pdf(config, htmlStr));
+                return reslove(html2pdf.generatePdf(config, htmlStr));
             } catch (e) {
                 return reject(e);
             }

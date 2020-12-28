@@ -64,7 +64,6 @@ export interface html2pdf_native {
     get_http_header(): NodeJS.Dict<string>;
     destroy_app(): void;
 }
-
 function setHeader<T extends ServerResponse>(res: T): void;
 function getHttpHeader(): NodeJS.Dict<string>;
 function createStream<T extends ServerResponse>(res: T, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
@@ -77,8 +76,9 @@ function createStreamAsync(config: IPdfConfig, htmlStr: string): Promise<ReadStr
 function createStreamAsync(htmlStr: string): Promise<ReadStream>;
 function createStreamAsync(config: IPdfConfig): Promise<ReadStream>;
 function generatePdf(config: IPdfConfig, htmlStr: string): Buffer | void;
-function generatePdf(config: IPdfConfig): void;
+function generatePdf(config: IPdfConfig): Buffer | void;
 function generatePdf(htmlStr: string): Buffer;
 function generatePdfAsync(config: IPdfConfig, htmlStr: string): Promise<Buffer>;
 function generatePdfAsync(htmlStr: string): Promise<Buffer>;
+function generatePdfAsync(config: IPdfConfig): Promise<Buffer | void>;
 function destroyApp(): void;
