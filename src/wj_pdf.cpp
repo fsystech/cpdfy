@@ -21,6 +21,9 @@ void to_cstr(v8::Isolate*isolate, v8::Local<v8::Value>val, std::string&output){
 	v8::String::Utf8Value str(isolate, val);
 	output.insert(output.length(), *str);
 }
+void destroy_app(const v8::FunctionCallbackInfo<v8::Value>& args){
+	destroy_wkhtmltopdf();
+}
 void v8_object_loop(v8::Isolate* isolate, const v8::Local<v8::Object>v8_obj, std::map<std::string, std::string>& out_put) {
 	v8::Local<v8::Context>ctx = isolate->GetCurrentContext();
 	v8::Local<v8::Array> property_names = v8_obj->GetOwnPropertyNames(ctx).ToLocalChecked();
@@ -104,16 +107,12 @@ void generate_pdf(const v8::FunctionCallbackInfo<v8::Value>& args) {
 			}
 			pdf_gen->dispose();
 			delete pdf_gen;
-			if( has_output_path == TRUE ) {
-				if( rec < 0 ){
-					throw_js_error(isolate, output->c_str());
-				} else {
-					args.GetReturnValue().Set(v8::Number::New(isolate, rec));
-				}
+			if( rec < 0 ){
+				throw_js_error(isolate, output->c_str());
 			} else {
-				if( rec < 0 ) {
-					args.GetReturnValue().Set(v8_str(isolate, output->c_str()));
-				} else{
+				if( has_output_path == TRUE ) {
+					args.GetReturnValue().Set(v8::Number::New(isolate, rec));
+				} else {
 					args.GetReturnValue().Set(Nan::CopyBuffer(output->c_str(), output->length()).ToLocalChecked());
 				}
 			}

@@ -60,10 +60,12 @@ export interface IPdfConfig {
 export interface html2pdf_native {
     generate_pdf(...args: any[]): any;
     get_http_header(): NodeJS.Dict<string>;
+    destroy_app(): void;
 }
 export interface html2pdf {
     generatePdf(config: IPdfConfig, htmlStr: string): Buffer;
     generatePdf(htmlStr: string): Buffer;
     generatePdfAsync(config: IPdfConfig, htmlStr: string): Promise<Buffer>;
     generatePdfAsync(htmlStr: string): Promise<Buffer>;
+    destroyApp(): void;
 }

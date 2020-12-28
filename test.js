@@ -5,7 +5,7 @@ const platform = os.platform();
 const arch = os.arch();
 //if (platform !== 'win32' || arch !== 'ia32') throw new Error(`Not supported platform =>${platform} and arch => ${arch}`);
 console.log(`platform =>${platform} and arch => ${arch}`);
-const { html2pdf } = require('./index');
+const html2pdf = require('./index');
 const fs = require('fs');
 console.log(html2pdf.getHttpHeader());
 const sleep = require('util').promisify(setTimeout)
@@ -23,12 +23,28 @@ async function test() {
     </BODY>
     </html>
     `;
-    await sleep(1000);
+    //await sleep(1000);
     console.log(os.tmpdir());
-    const fst = fs.createWriteStream(path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
-    html2pdf.createStram({}, html).pipe(fst);
+
+    html2pdf.createStram({}, html, (err, stream) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        const fst = fs.createWriteStream(path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+        fst.on("error", (err) => {
+            console.log(err);
+            html2pdf.destroyApp();
+            stream.emit("end");
+        }).on("close", () => {
+            console.log("destroy app");
+            html2pdf.destroyApp();
+        });
+        stream.pipe(fst);
+    });
+    console.log("exit");
     return;
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 2; i++) {
         const result = html2pdf.generatePdf({ out_path: path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`) }, html);
         console.log(`Result ${result}=>${i + 1}`);
         //if (global.gc) { global.gc(); }

@@ -8,7 +8,6 @@
 // 6:55 PM 12/12/2020
 #include "v8_util.h"
 #include "wj_pdf.h"
-
 #define SET_NATIVE_METHOD(app, isolate, method_name, method, context) \
 app->Set( context,                                                    \
 v8_str( isolate, method_name ),                                       \
@@ -25,6 +24,8 @@ void Initialize( v8::Local<v8::Object> exports ) {
     // third parameter to the `FunctionTemplate` constructor.
     SET_NATIVE_METHOD( app, isolate, "generate_pdf", generate_pdf, context );
     SET_NATIVE_METHOD( app, isolate, "get_http_header", get_http_header, context );
+    SET_NATIVE_METHOD( app, isolate, "destroy_app", destroy_app, context );
+    //
     exports->Set( context, v8_str( isolate, "html_pdf_c" ), app ).ToChecked();
 }
 

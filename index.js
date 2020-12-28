@@ -73,7 +73,6 @@ function parseConfig(obj, outObj) {
         }
     }
 }
-
 /**
  * Create PDF Config
  * @param {IPdfConfig} config
@@ -109,27 +108,39 @@ class html2pdf {
     static getHttpHeader() {
         return nativeHtml2pdf.get_http_header();
     }
+    static destroyApp() {
+        return nativeHtml2pdf.destroy_app();
+    }
     /**
      * 
      * @param {IPdfConfig} config 
      * @param {string} htmlStr
-     * @returns {fs.ReadStream} 
+     * @param {(err:Error, stream:fs.ReadStream)=>void} next
+     * @returns {void} 
      */
-    static createStram(config, htmlStr) {
+    static createStram(config, htmlStr, next) {
         prepareConfig(config);
         config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
-        nativeHtml2pdf.generate_pdf(config, htmlStr);
+        try {
+            nativeHtml2pdf.generate_pdf(config, htmlStr);
+        } catch (e) {
+            return next(e, null);
+        }
         const stream = fs.createReadStream(config.out_path);
-        stream.on("close", () => {
+        stream.on("open", (fd) => {
+            next(null, stream);
+        }).on("error", (err) => {
+            next(err, null);
+        }).on("end", () => {
             fs.stat(config.out_path, (err, state) => {
-                if(state){
+                if (state) {
                     fs.rm(config.out_path, (err) => {
                         // No need to verify this result
                     });
                 }
             });
         });
-        return stream;
+        return void 0;
     }
     static generatePdfAsync(config, htmlStr) {
         return new Promise((reject, reslove) => {
@@ -138,5 +149,4 @@ class html2pdf {
         });
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.html2pdf = html2pdf;
+module.exports = html2pdf;

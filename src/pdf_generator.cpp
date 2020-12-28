@@ -259,6 +259,10 @@ void pdf_ext::pdf_generator::dispose() {
 	if ( _disposed == FALSE ) {
 		_free_obj(_msg);
 		_disposed = TRUE;
+		if (_converter != NULL) {
+			/* Destroy the converter object since we are done with it */
+			wkhtmltopdf_destroy_converter(_converter); _converter = NULL;
+		}
 		if ( _wgs != NULL ) {
 			/* Destroy the global settings since we are done with it */
 			wkhtmltopdf_destroy_global_settings(_wgs); _wgs = NULL;
@@ -268,10 +272,6 @@ void pdf_ext::pdf_generator::dispose() {
 			wkhtmltopdf_destroy_object_settings(_wos); _wos = NULL;
 		}
 		_free_obj(_wgs_settings); _free_obj(_wos_settings);
-		if (_converter != NULL) {
-			/* Destroy the converter object since we are done with it */
-			wkhtmltopdf_destroy_converter(_converter); _converter = NULL;
-		}
 		//wkhtmltopdf_deinit();
 	}
 };
