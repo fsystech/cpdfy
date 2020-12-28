@@ -13,6 +13,8 @@
 const path = require('path');
 const os = require("os");
 const fs = require('fs');
+const { ServerResponse } = require('http');
+
 /**
  * Import PDF Native Module
  * @returns {import('./index').html2pdf_native}
@@ -95,6 +97,59 @@ function prepareConfig(config) {
         config[prop] = outConfig[prop];
     }
 }
+/**
+     * 
+     * @param {ServerResponse} res 
+     */
+function _setHeader(res) {
+    const header = nativeHtml2pdf.get_http_header();
+    for (let key in header) {
+        res.setHeader(key, header[key]);
+    }
+}
+/**
+ * Write to Http Response
+ * @param {ServerResponse} res
+ * @param {IPdfConfig} config 
+ * @param {string} htmlStr
+ * @param {(err?:Error)=>void} next
+ * @returns {void} 
+ */
+function _pipeStream(res, config, htmlStr, next) {
+    if (typeof (config) == "string") {
+        if (typeof (htmlStr) === "function") {
+            next = htmlStr; htmlStr = undefined;
+        }
+        htmlStr = config; config = {};
+    }
+    if (typeof (htmlStr) === "function") {
+        next = htmlStr; htmlStr = undefined;
+    }
+    prepareConfig(config);
+    config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
+    try {
+        nativeHtml2pdf.generate_pdf(config, htmlStr);
+    } catch (e) {
+        return next(e);
+    }
+    const stream = fs.createReadStream(config.out_path);
+    stream.on("open", (fd) => {
+        _setHeader(res);
+        stream.pipe(res);
+    }).on("error", (err) => {
+        next(err);
+    }).on("end", () => {
+        fs.stat(config.out_path, (err, state) => {
+            if (state) {
+                fs.rm(config.out_path, (err) => {
+                    // No need to verify this result
+                });
+            }
+        });
+        return next();
+    });
+    return void 0;
+}
 class html2pdf {
     /**
      * Generate PDF
@@ -108,6 +163,13 @@ class html2pdf {
         prepareConfig(config);
         return nativeHtml2pdf.generate_pdf(config, htmlStr);
     }
+    /**
+     * 
+     * @param {ServerResponse} res 
+     */
+    static setHeader(res) {
+        return _setHeader(res);
+    }
     static getHttpHeader() {
         return nativeHtml2pdf.get_http_header();
     }
@@ -116,12 +178,15 @@ class html2pdf {
     }
     /**
      * 
-     * @param {IPdfConfig} config 
+     * @param {IPdfConfig|ServerResponse} config 
      * @param {string} htmlStr
      * @param {(err:Error, stream:fs.ReadStream)=>void} next
      * @returns {void} 
      */
     static createStream(config, htmlStr, next) {
+        if (config instanceof ServerResponse) {
+            return _pipeStream.apply(this, Array.prototype.slice.call(arguments));
+        }
         if (typeof (config) == "string") {
             if (typeof (htmlStr) === "function") {
                 next = htmlStr; htmlStr = undefined;
@@ -144,8 +209,10 @@ class html2pdf {
         }).on("error", (err) => {
             next(err, null);
         }).on("end", () => {
+            // @ts-ignore
             fs.stat(config.out_path, (err, state) => {
                 if (state) {
+                    // @ts-ignore
                     fs.rm(config.out_path, (err) => {
                         // No need to verify this result
                     });

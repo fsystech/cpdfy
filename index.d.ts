@@ -6,6 +6,8 @@
 */
 //By Rajib Chy
 // On 12:25 PM 12/25/2020
+import { ServerResponse } from 'http';
+import { ReadStream } from 'fs';
 export interface IPdfConfig {
     /** Full url e.g. https://www.safeonline.world */
     from_url?: string;
@@ -62,13 +64,18 @@ export interface html2pdf_native {
     get_http_header(): NodeJS.Dict<string>;
     destroy_app(): void;
 }
+
+function setHeader<T extends ServerResponse>(res: T): void;
 function getHttpHeader(): NodeJS.Dict<string>;
-function createStream(config: IPdfConfig, htmlStr: string, next: (err: Error, stream: import('fs').ReadStream) => void);
-function createStream(config: IPdfConfig, next: (err: Error, stream: import('fs').ReadStream) => void);
-function createStream(htmlStr: string, next: (err: Error, stream: import('fs').ReadStream) => void);
-function createStreamAsync(config: IPdfConfig, htmlStr: string): Promise<import('fs').ReadStream>;
-function createStreamAsync(htmlStr: string): Promise<import('fs').ReadStream>;
-function createStreamAsync(config: IPdfConfig): Promise<import('fs').ReadStream>;
+function createStream<T extends ServerResponse>(res: T, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
+function createStream<T extends ServerResponse>(res: T, config: IPdfConfig, next?: (err?: Error) => void): void;
+function createStream<T extends ServerResponse>(res: T, htmlStr: string, next?: (err?: Error) => void): void;
+function createStream(config: IPdfConfig, htmlStr: string, next: (err: Error, stream: ReadStream) => void);
+function createStream(config: IPdfConfig, next: (err: Error, stream: ReadStream) => void);
+function createStream(htmlStr: string, next: (err: Error, stream: ReadStream) => void);
+function createStreamAsync(config: IPdfConfig, htmlStr: string): Promise<ReadStream>;
+function createStreamAsync(htmlStr: string): Promise<ReadStream>;
+function createStreamAsync(config: IPdfConfig): Promise<ReadStream>;
 function generatePdf(config: IPdfConfig, htmlStr: string): Buffer | void;
 function generatePdf(config: IPdfConfig): void;
 function generatePdf(htmlStr: string): Buffer;
