@@ -8,11 +8,29 @@ console.log(`platform =>${platform} and arch => ${arch}`);
 const html2pdf = require('./index');
 const fs = require('fs');
 console.log(html2pdf.getHttpHeader());
-const sleep = require('util').promisify(setTimeout)
+const sleep = require('util').promisify(setTimeout);
 async function test() {
-    //html2pdf.generatePdf({ from_url: "https://wkhtmltopdf.org/", out_path: path.resolve('./from_url.pdf') });
-    //await sleep(5);
     const html = fs.readFileSync('./test_output/test.html', { encoding: "utf-8" }).replace(/^\uFEFF/, '');
+    html2pdf.createStream({ from_url: "https://wkhtmltopdf.org/" }, (err, stream) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        const fst = fs.createWriteStream(path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+        stream.pipe(fst);
+    });
+    html2pdf.createStream(html, (err, stream) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        const fst = fs.createWriteStream(path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+        stream.pipe(fst);
+    });
+    return;
+    html2pdf.generatePdf({ from_url: "https://wkhtmltopdf.org/", out_path: path.resolve('./from_url.pdf') });
+    //await sleep(5);
+    
     const xhtml = `<!DOCTYPE html>
     <html lang="es">
     <head>
@@ -26,7 +44,7 @@ async function test() {
     //await sleep(1000);
     console.log(os.tmpdir());
 
-    html2pdf.createStram({}, html, (err, stream) => {
+    html2pdf.createStream({}, html, (err, stream) => {
         if (err) {
             console.log(err);
             return;

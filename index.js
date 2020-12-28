@@ -102,6 +102,9 @@ class html2pdf {
      * @param {string|void} htmlStr 
      */
     static generatePdf(config, htmlStr) {
+        if (typeof (config) === "string") {
+            htmlStr = config; config = {};
+        }
         prepareConfig(config);
         return nativeHtml2pdf.generate_pdf(config, htmlStr);
     }
@@ -118,7 +121,16 @@ class html2pdf {
      * @param {(err:Error, stream:fs.ReadStream)=>void} next
      * @returns {void} 
      */
-    static createStram(config, htmlStr, next) {
+    static createStream(config, htmlStr, next) {
+        if (typeof (config) == "string") {
+            if (typeof (htmlStr) === "function") {
+                next = htmlStr; htmlStr = undefined;
+            }
+            htmlStr = config; config = {};
+        }
+        if (typeof (htmlStr) === "function") {
+            next = htmlStr; htmlStr = undefined;
+        }
         prepareConfig(config);
         config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
         try {
@@ -142,10 +154,29 @@ class html2pdf {
         });
         return void 0;
     }
+    static createStreamAsync(config, htmlStr) {
+        if (typeof (config) === "string") {
+            htmlStr = config; config = {};
+        }
+        return new Promise((reject, reslove) => {
+            html2pdf.createStream(config, htmlStr, (err, stream) => {
+                if (err) return reject(err);
+                return reslove(stream);
+            })
+        });
+    }
     static generatePdfAsync(config, htmlStr) {
+        if (typeof (config) === "string") {
+            htmlStr = config; config = {};
+        }
         return new Promise((reject, reslove) => {
             prepareConfig(config);
-            reslove(nativeHtml2pdf.generate_pdf(config, htmlStr));
+            try {
+                return reslove(nativeHtml2pdf.generate_pdf(config, htmlStr));
+            } catch (e) {
+                return reject(e);
+            }
+
         });
     }
 };
