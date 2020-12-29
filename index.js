@@ -99,9 +99,9 @@ function prepareConfig(config) {
     }
 }
 /**
-     * 
-     * @param {ServerResponse} res 
-     */
+ * 
+ * @param {ServerResponse} res 
+ */
 function _setHeader(res) {
     const header = nativeHtml2pdf.get_http_header();
     for (let key in header) {
