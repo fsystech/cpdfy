@@ -99,7 +99,7 @@ function prepareConfig(config) {
     }
 }
 /**
- * 
+ * Set pdf response header
  * @param {ServerResponse} res 
  */
 function _setHeader(res) {
@@ -110,7 +110,7 @@ function _setHeader(res) {
 }
 /**
  * Write to Http Response
- * @param {import('stream').Writable} res
+ * @param {Writable} res
  * @param {IPdfConfig} config 
  * @param {string} htmlStr
  * @param {(err?:Error)=>void} next
