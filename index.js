@@ -13,6 +13,7 @@
 const path = require('path');
 const os = require("os");
 const fs = require('fs');
+const { Writable } = require('stream');
 const { ServerResponse } = require('http');
 
 /**
@@ -109,13 +110,14 @@ function _setHeader(res) {
 }
 /**
  * Write to Http Response
- * @param {ServerResponse} res
+ * @param {import('stream').Writable} res
  * @param {IPdfConfig} config 
  * @param {string} htmlStr
  * @param {(err?:Error)=>void} next
+ * @param {()=>boolean} onOpen
  * @returns {void} 
  */
-function _pipeStream(res, config, htmlStr, next) {
+function _pipeToWritableStream(res, config, htmlStr, next, onOpen) {
     if (typeof (config) == "string") {
         if (typeof (htmlStr) === "function") {
             next = htmlStr; htmlStr = undefined;
@@ -133,12 +135,17 @@ function _pipeStream(res, config, htmlStr, next) {
         return next(e);
     }
     const stream = fs.createReadStream(config.out_path);
+    let isEnded = false;
     stream.on("open", (fd) => {
-        _setHeader(res);
+        if (!onOpen()) {
+            return stream.emit("end");
+        }
         stream.pipe(res);
     }).on("error", (err) => {
-        next(err);
+        return next(err);
     }).on("end", () => {
+        if (isEnded) return;
+        isEnded = true;
         fs.stat(config.out_path, (err, state) => {
             if (state) {
                 fs.rm(config.out_path, (err) => {
@@ -149,6 +156,41 @@ function _pipeStream(res, config, htmlStr, next) {
         return next();
     });
     return void 0;
+}
+/**
+ * Write to Http Response
+ * @param {Writable} res
+ * @param {IPdfConfig} config 
+ * @param {string} htmlStr
+ * @param {(err?:Error)=>void} next
+ * @returns {void} 
+ */
+function _pipeStream(res, config, htmlStr, next) {
+    if (typeof (config) == "string") {
+        if (typeof (htmlStr) === "function") {
+            next = htmlStr; htmlStr = undefined;
+        }
+        htmlStr = config; config = {};
+    }
+    if (typeof (htmlStr) === "function") {
+        next = htmlStr; htmlStr = undefined;
+    }
+    let onOpen;
+    if ("headersSent" in res || res instanceof ServerResponse) {
+        onOpen = () => {
+            // @ts-ignore
+            if (res.headersSent) {
+                return next(new Error("Remote connection closed...")), false;
+            }
+            return true;
+        };
+    } else {
+        onOpen = () => true;
+    }
+    if (typeof (next) !== "function") {
+        next = (...args) => void 0;
+    }
+    return _pipeToWritableStream(res, config, htmlStr, next, onOpen);
 }
 class html2pdf {
     /**
@@ -177,14 +219,14 @@ class html2pdf {
         return nativeHtml2pdf.destroy_app();
     }
     /**
-     * 
-     * @param {IPdfConfig|ServerResponse} config 
+     * Create or pip to ouput stream
+     * @param {IPdfConfig|ServerResponse|fs.WriteStream} config 
      * @param {string} htmlStr
      * @param {(err:Error, stream:fs.ReadStream)=>void} next
      * @returns {void} 
      */
     static createStream(config, htmlStr, next) {
-        if (config instanceof ServerResponse) {
+        if (config instanceof ServerResponse || config instanceof fs.WriteStream) {
             return _pipeStream.apply(this, Array.prototype.slice.call(arguments));
         }
         if (typeof (config) == "string") {

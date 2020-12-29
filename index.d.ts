@@ -7,7 +7,7 @@
 //By Rajib Chy
 // On 12:25 PM 12/25/2020
 import { ServerResponse } from 'http';
-import { ReadStream } from 'fs';
+import { ReadStream, WriteStream } from 'fs';
 export interface IPdfConfig {
     /** Full url e.g. https://www.safeonline.world */
     from_url?: string;
@@ -69,9 +69,12 @@ function getHttpHeader(): NodeJS.Dict<string>;
 function createStream<T extends ServerResponse>(res: T, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
 function createStream<T extends ServerResponse>(res: T, config: IPdfConfig, next?: (err?: Error) => void): void;
 function createStream<T extends ServerResponse>(res: T, htmlStr: string, next?: (err?: Error) => void): void;
-function createStream(config: IPdfConfig, htmlStr: string, next: (err: Error, stream: ReadStream) => void);
-function createStream(config: IPdfConfig, next: (err: Error, stream: ReadStream) => void);
-function createStream(htmlStr: string, next: (err: Error, stream: ReadStream) => void);
+function createStream(outStream: WriteStream, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
+function createStream(outStream: WriteStream, config: IPdfConfig, next?: (err?: Error) => void): void;
+function createStream(outStream: WriteStream, htmlStr: string, next?: (err?: Error) => void): void;
+function createStream(config: IPdfConfig, htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;
+function createStream(config: IPdfConfig, next: (err: Error, stream: ReadStream) => void): void;
+function createStream(htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;;
 function createStreamAsync(config: IPdfConfig, htmlStr: string): Promise<ReadStream>;
 function createStreamAsync(htmlStr: string): Promise<ReadStream>;
 function createStreamAsync(config: IPdfConfig): Promise<ReadStream>;

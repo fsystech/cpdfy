@@ -10,27 +10,35 @@ const fs = require('fs');
 console.log(html2pdf.getHttpHeader());
 const sleep = require('util').promisify(setTimeout);
 async function test() {
-    const html = fs.readFileSync('./test_output/test.html', { encoding: "utf-8" }).replace(/^\uFEFF/, '');
     html2pdf.createStream({ from_url: "https://wkhtmltopdf.org/" }, (err, stream) => {
         if (err) {
             console.log(err);
             return;
         }
-        const fst = fs.createWriteStream(path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+        const fst = fs.createWriteStream(path.resolve(`./test_output/1_test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
         stream.pipe(fst);
     });
+    const html = fs.readFileSync('./test_output/test.html', { encoding: "utf-8" }).replace(/^\uFEFF/, '');
     html2pdf.createStream(html, (err, stream) => {
         if (err) {
             console.log(err);
             return;
         }
-        const fst = fs.createWriteStream(path.resolve(`./test_output/test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+        const fst = fs.createWriteStream(path.resolve(`./test_output/2_test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
         stream.pipe(fst);
+    });
+    const file = fs.createWriteStream(path.resolve(`./test_output/3_test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+    html2pdf.createStream(file, html, (err) => {
+        if (err instanceof Error) {
+            console.log(err);
+        } else {
+            console.log("Done...");
+        }
     });
     return;
     html2pdf.generatePdf({ from_url: "https://wkhtmltopdf.org/", out_path: path.resolve('./from_url.pdf') });
     //await sleep(5);
-    
+
     const xhtml = `<!DOCTYPE html>
     <html lang="es">
     <head>
