@@ -118,15 +118,6 @@ function _setHeader(res) {
  * @returns {void} 
  */
 function _pipeToWritableStream(res, config, htmlStr, next, onOpen) {
-    if (typeof (config) == "string") {
-        if (typeof (htmlStr) === "function") {
-            next = htmlStr; htmlStr = undefined;
-        }
-        htmlStr = config; config = {};
-    }
-    if (typeof (htmlStr) === "function") {
-        next = htmlStr; htmlStr = undefined;
-    }
     prepareConfig(config);
     config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
     try {
@@ -184,8 +175,7 @@ function _pipeStream(res, config, htmlStr, next) {
             if (res.headersSent) {
                 return next(new Error("Remote connection closed...")), false;
             }
-            _setHeader(res);
-            return true;
+            return _setHeader(res), true;
         };
     } else {
         onOpen = () => true;
