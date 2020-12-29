@@ -178,10 +178,10 @@ function _pipeStream(res, config, htmlStr, next) {
     let onOpen;
     if ("headersSent" in res || res instanceof ServerResponse) {
         onOpen = () => {
-            // @ts-ignore
             if (res.headersSent) {
                 return next(new Error("Remote connection closed...")), false;
             }
+            _setHeader(res);
             return true;
         };
     } else {
