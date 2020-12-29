@@ -174,7 +174,10 @@ function _pipeStream(res, config, htmlStr, next) {
     }
     if (typeof (htmlStr) === "function") {
         next = htmlStr; htmlStr = undefined;
+    } else if (typeof (htmlStr) !== "string") {
+        htmlStr = undefined;
     }
+    /** @type {()=>boolean} */
     let onOpen;
     if ("headersSent" in res || res instanceof ServerResponse) {
         onOpen = () => {
