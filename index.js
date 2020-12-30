@@ -157,7 +157,7 @@ function _pipeToWritableStream(res, config, htmlStr, next, onOpen) {
  * @returns {void} 
  */
 function _pipeStream(res, config, htmlStr, next) {
-    if (typeof (config) == "string") {
+    if (typeof (config) === "string") {
         if (typeof (htmlStr) === "function") {
             next = htmlStr; htmlStr = undefined;
         }
@@ -230,6 +230,8 @@ class html2pdf {
         }
         if (typeof (htmlStr) === "function") {
             next = htmlStr; htmlStr = undefined;
+        } else if (typeof (htmlStr) !== "string") {
+            htmlStr = undefined;
         }
         prepareConfig(config);
         config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
