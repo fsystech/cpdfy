@@ -1,7 +1,7 @@
 {
     "targets": [
         {
-            "target_name": "html_pdf_c",
+            "target_name": "cpdfy",
             "cflags!": ["-fno-exceptions"],
             "cflags_cc!": ["-fno-exceptions"],
             "sources": [

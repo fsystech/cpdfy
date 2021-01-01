@@ -64,24 +64,27 @@ export interface html2pdf_native {
     get_http_header(): NodeJS.Dict<string>;
     destroy_app(): void;
 }
-function setHeader<T extends ServerResponse>(res: T): void;
-function getHttpHeader(): NodeJS.Dict<string>;
-function createStream<T extends ServerResponse>(res: T, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
-function createStream<T extends ServerResponse>(res: T, config: IPdfConfig, next?: (err?: Error) => void): void;
-function createStream<T extends ServerResponse>(res: T, htmlStr: string, next?: (err?: Error) => void): void;
-function createStream(outStream: WriteStream, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
-function createStream(outStream: WriteStream, config: IPdfConfig, next?: (err?: Error) => void): void;
-function createStream(outStream: WriteStream, htmlStr: string, next?: (err?: Error) => void): void;
-function createStream(config: IPdfConfig, htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;
-function createStream(config: IPdfConfig, next: (err: Error, stream: ReadStream) => void): void;
-function createStream(htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;;
-function createStreamAsync(config: IPdfConfig, htmlStr: string): Promise<ReadStream>;
-function createStreamAsync(htmlStr: string): Promise<ReadStream>;
-function createStreamAsync(config: IPdfConfig): Promise<ReadStream>;
-function generatePdf(config: IPdfConfig, htmlStr: string): Buffer | void;
-function generatePdf(config: IPdfConfig): Buffer | void;
-function generatePdf(htmlStr: string): Buffer;
-function generatePdfAsync(config: IPdfConfig, htmlStr: string): Promise<Buffer>;
-function generatePdfAsync(htmlStr: string): Promise<Buffer>;
-function generatePdfAsync(config: IPdfConfig): Promise<Buffer | void>;
-function destroyApp(): void;
+export interface ICpdfy {
+    setHeader<T extends ServerResponse>(res: T): void;
+    getHttpHeader(): NodeJS.Dict<string>;
+    createStream<T extends ServerResponse>(res: T, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
+    createStream<T extends ServerResponse>(res: T, config: IPdfConfig, next?: (err?: Error) => void): void;
+    createStream<T extends ServerResponse>(res: T, htmlStr: string, next?: (err?: Error) => void): void;
+    createStream(outStream: WriteStream, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
+    createStream(outStream: WriteStream, config: IPdfConfig, next?: (err?: Error) => void): void;
+    createStream(outStream: WriteStream, htmlStr: string, next?: (err?: Error) => void): void;
+    createStream(config: IPdfConfig, htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;
+    createStream(config: IPdfConfig, next: (err: Error, stream: ReadStream) => void): void;
+    createStream(htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;
+    createStreamAsync(config: IPdfConfig, htmlStr: string): Promise<ReadStream>;
+    createStreamAsync(htmlStr: string): Promise<ReadStream>;
+    createStreamAsync(config: IPdfConfig): Promise<ReadStream>;
+    generatePdf(config: IPdfConfig, htmlStr: string): Buffer | void;
+    generatePdf(config: IPdfConfig): Buffer | void;
+    generatePdf(htmlStr: string): Buffer;
+    generatePdfAsync(config: IPdfConfig, htmlStr: string): Promise<Buffer>;
+    generatePdfAsync(htmlStr: string): Promise<Buffer>;
+    generatePdfAsync(config: IPdfConfig): Promise<Buffer | void>;
+    destroyApp(): void;
+}
+declare var Cpdfy: ICpdfy;

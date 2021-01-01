@@ -23,13 +23,13 @@ const { ServerResponse } = require('http');
 function import_module() {
     let binding_path;
     if (process.env.LUNCH_MODE === "DEBUG") {
-        binding_path = "./build/Release/html_pdf_c.node";
+        binding_path = "./build/Release/cpdfy.node";
     } else {
         binding_path = require('node-pre-gyp').find(path.resolve(path.join(__dirname, './package.json')));
     }
-    return require(binding_path).html_pdf_c;
+    return require(binding_path).cpdfy;
 }
-const nativeHtml2pdf = import_module();
+const cpdfy = import_module();
 /*const defaultConfig = {
     global_settings: {
         "documentTitle": "Hello World",
@@ -103,7 +103,7 @@ function prepareConfig(config) {
  * @param {ServerResponse} res 
  */
 function _setHeader(res) {
-    const header = nativeHtml2pdf.get_http_header();
+    const header = cpdfy.get_http_header();
     for (let key in header) {
         res.setHeader(key, header[key]);
     }
@@ -121,7 +121,7 @@ function _pipeToWritableStream(res, config, htmlStr, next, onOpen) {
     prepareConfig(config);
     config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
     try {
-        nativeHtml2pdf.generate_pdf(config, htmlStr);
+        cpdfy.generate_pdf(config, htmlStr);
     } catch (e) {
         return next(e);
     }
@@ -185,7 +185,7 @@ function _pipeStream(res, config, htmlStr, next) {
     }
     return _pipeToWritableStream(res, config, htmlStr, next, onOpen);
 }
-class html2pdf {
+class Cpdfy {
     /**
      * Generate PDF
      * @param {IPdfConfig} config 
@@ -196,7 +196,7 @@ class html2pdf {
             htmlStr = config; config = {};
         }
         prepareConfig(config);
-        return nativeHtml2pdf.generate_pdf(config, htmlStr);
+        return cpdfy.generate_pdf(config, htmlStr);
     }
     /**
      * 
@@ -206,10 +206,10 @@ class html2pdf {
         return _setHeader(res);
     }
     static getHttpHeader() {
-        return nativeHtml2pdf.get_http_header();
+        return cpdfy.get_http_header();
     }
     static destroyApp() {
-        return nativeHtml2pdf.destroy_app();
+        return cpdfy.destroy_app();
     }
     /**
      * Create or pip to ouput stream
@@ -236,7 +236,7 @@ class html2pdf {
         prepareConfig(config);
         config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
         try {
-            nativeHtml2pdf.generate_pdf(config, htmlStr);
+            cpdfy.generate_pdf(config, htmlStr);
         } catch (e) {
             return next(e, null);
         }
@@ -263,7 +263,7 @@ class html2pdf {
             htmlStr = config; config = {};
         }
         return new Promise((reject, reslove) => {
-            html2pdf.createStream(config, htmlStr, (err, stream) => {
+            Cpdfy.createStream(config, htmlStr, (err, stream) => {
                 if (err) return reject(err);
                 return reslove(stream);
             });
@@ -272,7 +272,7 @@ class html2pdf {
     static generatePdfAsync(config, htmlStr) {
         return new Promise((reject, reslove) => {
             try {
-                return reslove(html2pdf.generatePdf(config, htmlStr));
+                return reslove(Cpdfy.generatePdf(config, htmlStr));
             } catch (e) {
                 return reject(e);
             }
@@ -280,4 +280,4 @@ class html2pdf {
         });
     }
 };
-module.exports = html2pdf;
+module.exports.Cpdfy = Cpdfy;

@@ -26,7 +26,7 @@ void Initialize( v8::Local<v8::Object> exports ) {
     SET_NATIVE_METHOD( app, isolate, "get_http_header", get_http_header, context );
     SET_NATIVE_METHOD( app, isolate, "destroy_app", destroy_app, context );
     //
-    exports->Set( context, v8_str( isolate, "html_pdf_c" ), app ).ToChecked();
+    exports->Set( context, v8_str( isolate, "cpdfy" ), app ).ToChecked();
 }
 
-NODE_MODULE( html_pdf_c, Initialize )
+NODE_MODULE( cpdfy, Initialize )

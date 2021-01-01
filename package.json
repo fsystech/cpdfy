@@ -21,7 +21,7 @@
     "clean": "node-gyp clean"
   },
   "binary": {
-    "module_name": "html_pdf_c",
+    "module_name": "cpdfy",
     "module_path": "./lib/binding/{configuration}/{node_abi}-{platform}-{arch}/",
     "remote_path": "./{module_name}/v{version}/{configuration}/",
     "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
