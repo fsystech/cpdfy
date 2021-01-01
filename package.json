@@ -26,14 +26,12 @@
     "clean": "node-gyp clean"
   },
   "keywords": [
-    "web",
-    "app",
-    "application",
-    "framework",
-    "middleware",
-    "template",
-    "engine",
-    "parser",
+    "pdf",
+    "generator",
+    "html",
+    "nodejs",
+    "converter",
+    "html2pdf",
     "cpdfy"
   ],
   "binary": {
