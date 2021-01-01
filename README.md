@@ -1,4 +1,4 @@
-# html-pdf-c-plus-plus
+# cPDFY
 HTML string to PDF converter with wkhtmltopdf
 ## Linux OS prerequisite
 `sudo apt install make`<br/>
@@ -6,8 +6,8 @@ HTML string to PDF converter with wkhtmltopdf
 `sudo apt install libfontconfig1 libxrender1`<br/>
 ### How to use it ?
 ```javascript
-/*import html-pdf-c-plus-plus instance*/
-const html2pdf = require('html-pdf-c-plus-plus');
+/*import cPdfy instance*/
+const html2pdf = require('cpdfy');
 ```
 #### Working with stream
 01# This example create `pdf` from `url`
