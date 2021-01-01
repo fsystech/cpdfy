@@ -1,18 +1,21 @@
 # cPDFY
-HTML string to PDF converter with wkhtmltopdf
+HTML string to PDF converter with <a href="https://github.com/wkhtmltopdf/wkhtmltopdf" target="_blank">wkhtmltopdf</a> native library both of Win/Linux operating system
+
 ## Linux OS prerequisite
 `sudo apt install make`<br/>
 `sudo apt install g++`<br/>
 `sudo apt install libfontconfig1 libxrender1`<br/>
+## How to install ?
+```npm install cpdfy --save```
 ### How to use it ?
 ```javascript
 /*import cPdfy instance*/
-const html2pdf = require('cpdfy');
+const { Cpdfy } = require('cpdfy');
 ```
 #### Working with stream
 01# This example create `pdf` from `url`
 ```javascript
-html2pdf.createStream({ from_url: "https://wkhtmltopdf.org/" }, (err, stream) => {
+Cpdfy.createStream({ from_url: "https://wkhtmltopdf.org/" }, (err, stream) => {
     if (err) {
         console.log(err);
         return;
@@ -24,7 +27,7 @@ html2pdf.createStream({ from_url: "https://wkhtmltopdf.org/" }, (err, stream) =>
 02# This example create `pdf` from `html string`
 ```javascript
 const html = fs.readFileSync('./test_output/test.html', { encoding: "utf-8" }).replace(/^\uFEFF/, '');
-html2pdf.createStream(html, (err, stream) => {
+Cpdfy.createStream(html, (err, stream) => {
     if (err) {
         console.log(err);
         return;
@@ -36,7 +39,7 @@ html2pdf.createStream(html, (err, stream) => {
 03# This example create `pdf` from `html string` and write to `fs.WriteStream`
 ```javascript
 const file = fs.createWriteStream(path.resolve(`./test_output/3_test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
-html2pdf.createStream(file, html, (err) => {
+Cpdfy.createStream(file, html, (err) => {
     if (err instanceof Error) {
         console.log(err);
     } else {
@@ -52,7 +55,7 @@ controller.get('/pdf-test', (ctx, match) => {
         return ctx.res.status(200).type("text").send("Invalid request...");
     }
     ctx.res.status(200).noCache();
-    html2pdf.createStream(ctx.res, { from_url: decodeURIComponent(url) }, (err) => err && ctx.handleError(err, () => { }));
+    Cpdfy.createStream(ctx.res, { from_url: decodeURIComponent(url) }, (err) => err && ctx.handleError(err, () => { }));
 });
 ```
 05# This example create `pdf` from `url` and write to `ServerResponse` with callback
@@ -62,12 +65,13 @@ controller.get('/pdf', (ctx, match) => {
     if (!url) {
         return ctx.res.status(200).type("text").send("Invalid request...");
     }
-    html2pdf.createStream({ from_url: decodeURIComponent(url) }, (err, stream) => {
+    Cpdfy.createStream({ from_url: decodeURIComponent(url) }, (err, stream) => {
         ctx.handleError(err, () => {
-            html2pdf.setHeader(ctx.res);
+            Cpdfy.setHeader(ctx.res);
             ctx.res.status(200).noCache().type("pdf");
             stream.pipe(ctx.res);
         });
     });
 });
 ```
+#### Note: This version (v0.0.1) supported win32/win64/linux64

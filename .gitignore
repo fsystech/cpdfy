@@ -3,3 +3,4 @@
 build/*
 lib/*
 test_output/*
+publish/*

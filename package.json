@@ -1,15 +1,20 @@
 {
-  "author": "Safe Online World Ltd.",
   "name": "cpdfy",
   "version": "0.0.1",
-  "description": "HTML string to PDF converter with wkhtmltopdf",
+  "description": "HTML string to PDF converter with wkhtmltopdf native library both of Win/Linux operating system",
   "main": "index.js",
-  "type": "commonjs",
   "types": "index.d.ts",
+  "author": {
+    "name": "Safe Online World Ltd.",
+    "email": "safeonlineworld@gmail.com",
+    "url": "https://github.com/safeonlineworld/cwserver/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/safeonlineworld/cpdfy.git"
   },
+  "homepage": "https://github.com/safeonlineworld/cwserver#readme",
+  "license": "CC-BY-4.0",
   "scripts": {
     "install": "node-pre-gyp install --build-from-source",
     "test": "node test.js",
@@ -20,6 +25,17 @@
     "rebuild": "node-gyp rebuild",
     "clean": "node-gyp clean"
   },
+  "keywords": [
+    "web",
+    "app",
+    "application",
+    "framework",
+    "middleware",
+    "template",
+    "engine",
+    "parser",
+    "cpdfy"
+  ],
   "binary": {
     "module_name": "cpdfy",
     "module_path": "./lib/binding/{configuration}/{node_abi}-{platform}-{arch}/",
@@ -27,13 +43,12 @@
     "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
     "host": "https://github.com/safeonlineworld/cpdfy"
   },
-  "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+ 	"nan": "^2.14.2",
+	"node-pre-gyp": "^0.17.0"
+  },
   "bundledDependencies": [
     "node-pre-gyp"
   ],
-  "dependencies": {
-    "nan": "^2.14.2",
-    "node-pre-gyp": "^0.17.0"
-  }
+  "dependencies": { }
 }
