@@ -1,9 +1,12 @@
 # cPDFY
 HTML to PDF converter with <a href="https://github.com/wkhtmltopdf/wkhtmltopdf">wkhtmltopdf</a> native library. Run on both ```Win/Linux``` operating system.<br/><br/>
 ```cPDFY``` is not a precompiled library. It will be compiled from source code in your machine.<br/>
-before install ```cPDFY``` see ```node-gyp``` prerequisite from <a href="https://github.com/nodejs/node-gyp#node-gyp---nodejs-native-addon-build-tool">here</a><br/><br/>
+Before install ```cPDFY``` see ```node-gyp``` prerequisite from <a href="https://github.com/nodejs/node-gyp#node-gyp---nodejs-native-addon-build-tool">here</a><br/><br/>
 
+## Windows prerequisite
+`npm install --global windows-build-tools`<br/><br/>
 ## Linux OS prerequisite
+`Python v2.7, v3.5, v3.6, v3.7, or v3.8`<br/>
 `sudo apt install make`<br/>
 `sudo apt install g++`<br/>
 `sudo apt install libfontconfig1 libxrender1`<br/>
