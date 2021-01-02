@@ -1,7 +1,7 @@
 {
   "name": "cpdfy",
   "version": "0.0.2",
-  "description": "HTML string to PDF converter with wkhtmltopdf native library both of Win/Linux operating system",
+  "description": "HTML to PDF converter with wkhtmltopdf native library. Run on both Win/Linux operating system.",
   "main": "index.js",
   "types": "index.d.ts",
   "author": {
