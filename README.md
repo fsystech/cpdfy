@@ -2,7 +2,6 @@
 HTML to PDF converter with <a href="https://github.com/wkhtmltopdf/wkhtmltopdf">wkhtmltopdf</a> native library. Run on both ```Win/Linux``` operating system.<br/><br/>
 ```cPDFY``` is not a precompiled library. It will be compiled from source code in your machine.<br/>
 You need to install ```node-gyp``` on both ```win/linux``` before install ```cPDFY```<br/>
-```npm install node-gyp -g```<br/>
 See ```node-gyp``` prerequisite from <a href="https://github.com/nodejs/node-gyp">here</a><br/>
 ## Linux OS prerequisite
 `sudo apt install make`<br/>
@@ -77,4 +76,4 @@ controller.get('/pdf', (ctx, match) => {
     });
 });
 ```
-#### Note: This version (v0.0.1) supports win32/win64/linux64
+#### Note: This version supports win32/win64/linux64
