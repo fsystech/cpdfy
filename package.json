@@ -1,6 +1,6 @@
 {
   "name": "cpdfy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "HTML string to PDF converter with wkhtmltopdf native library both of Win/Linux operating system",
   "main": "index.js",
   "types": "index.d.ts",
@@ -13,12 +13,11 @@
     "type": "git",
     "url": "git://github.com/safeonlineworld/cpdfy.git"
   },
-  "homepage": "https://github.com/safeonlineworld/cwserver#readme",
+  "homepage": "https://github.com/safeonlineworld/cpdfy#readme",
   "license": "CC-BY-4.0",
   "scripts": {
     "install": "node-pre-gyp install --build-from-source",
     "test": "node test.js",
-    "app": "node64 test.js",
     "build:dev": "node-gyp build --debug",
     "build": "node-gyp clean configure build --verbose --arch=ia32",
     "rebuild:dev": "node-gyp rebuild --debug",
@@ -41,12 +40,12 @@
     "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
     "host": "https://github.com/safeonlineworld/cpdfy"
   },
-  "devDependencies": {
- 	"nan": "^2.14.2",
-	"node-pre-gyp": "^0.17.0"
-  },
+  "devDependencies": {},
   "bundledDependencies": [
     "node-pre-gyp"
   ],
-  "dependencies": { }
+  "dependencies": {
+    "nan": "^2.14.2",
+    "node-pre-gyp": "^0.17.0"
+  }
 }
