@@ -11,6 +11,12 @@ const fs = require('fs');
 console.log(Cpdfy.getHttpHeader());
 const sleep = require('util').promisify(setTimeout);
 async function test() {
+    /*try {
+        const pdfStream = await Cpdfy.createStreamAsync({ from_url: "https://wkhtmltopdf.org/" });
+        pdfStream.pipe(fs.createWriteStream(path.resolve(`./test_output/0_test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`)));
+    } catch (e) { 
+        console.log(e);
+    }*/
     Cpdfy.createStream({ from_url: "https://wkhtmltopdf.org/" }, (err, stream) => {
         if (err) {
             console.log(err);

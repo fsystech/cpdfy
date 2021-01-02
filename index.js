@@ -276,10 +276,14 @@ class Cpdfy {
             htmlStr = config; config = {};
         }
         return new Promise((reject, reslove) => {
-            Cpdfy.createStream(config, htmlStr, (err, stream) => {
-                if (err) return reject(err);
-                return reslove(stream);
-            });
+            try {
+                Cpdfy.createStream(config, htmlStr, (err, stream) => {
+                    if (err) return reject(err);
+                    return reslove(stream);
+                });
+            } catch (e) {
+                return reject(e);
+            }
         });
     }
     static generatePdfAsync(config, htmlStr) {

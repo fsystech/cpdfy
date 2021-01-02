@@ -110,6 +110,14 @@ controller.get('/pdf', (ctx, match) => {
     });
 });
 ```
+07# This example create `pdf` from `url` and write to ouput path
+```javascript
+Cpdfy.generatePdf({ from_url: "https://wkhtmltopdf.org/", out_path: path.resolve('./from_url.pdf') });
+```
+08# This example create `pdf` from `url` and return `Buffer`
+```javascript
+Cpdfy.generatePdf({ from_url: "https://wkhtmltopdf.org/" });
+```
 #### Note: This version supports win32/win64/linux64
 [cpdfy-logo]: https://i.imgur.com/YtsVVhk.png
 [cpdfy-url]: http://cpdfy.safeonline.world/
