@@ -8,7 +8,7 @@
 // On 12:25 PM 12/25/2020
 import { ServerResponse } from 'http';
 import { ReadStream, WriteStream } from 'fs';
-export interface IPdfConfig {
+export interface ICPdfConfig {
     /** Full url e.g. https://www.safeonline.world */
     from_url?: string;
     /** should be absolute path */
@@ -67,24 +67,24 @@ export interface html2pdf_native {
 export interface ICpdfy {
     setHeader<T extends ServerResponse>(res: T): void;
     getHttpHeader(): NodeJS.Dict<string>;
-    createStream<T extends ServerResponse>(res: T, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
-    createStream<T extends ServerResponse>(res: T, config: IPdfConfig, next?: (err?: Error) => void): void;
+    createStream<T extends ServerResponse>(res: T, config: ICPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
+    createStream<T extends ServerResponse>(res: T, config: ICPdfConfig, next?: (err?: Error) => void): void;
     createStream<T extends ServerResponse>(res: T, htmlStr: string, next?: (err?: Error) => void): void;
-    createStream(outStream: WriteStream, config: IPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
-    createStream(outStream: WriteStream, config: IPdfConfig, next?: (err?: Error) => void): void;
+    createStream(outStream: WriteStream, config: ICPdfConfig, htmlStr: string, next?: (err?: Error) => void): void;
+    createStream(outStream: WriteStream, config: ICPdfConfig, next?: (err?: Error) => void): void;
     createStream(outStream: WriteStream, htmlStr: string, next?: (err?: Error) => void): void;
-    createStream(config: IPdfConfig, htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;
-    createStream(config: IPdfConfig, next: (err: Error, stream: ReadStream) => void): void;
+    createStream(config: ICPdfConfig, htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;
+    createStream(config: ICPdfConfig, next: (err: Error, stream: ReadStream) => void): void;
     createStream(htmlStr: string, next: (err: Error, stream: ReadStream) => void): void;
-    createStreamAsync(config: IPdfConfig, htmlStr: string): Promise<ReadStream>;
+    createStreamAsync(config: ICPdfConfig, htmlStr: string): Promise<ReadStream>;
     createStreamAsync(htmlStr: string): Promise<ReadStream>;
-    createStreamAsync(config: IPdfConfig): Promise<ReadStream>;
-    generatePdf(config: IPdfConfig, htmlStr: string): Buffer | void;
-    generatePdf(config: IPdfConfig): Buffer | void;
+    createStreamAsync(config: ICPdfConfig): Promise<ReadStream>;
+    generatePdf(config: ICPdfConfig, htmlStr: string): Buffer | void;
+    generatePdf(config: ICPdfConfig): Buffer | void;
     generatePdf(htmlStr: string): Buffer;
-    generatePdfAsync(config: IPdfConfig, htmlStr: string): Promise<Buffer>;
+    generatePdfAsync(config: ICPdfConfig, htmlStr: string): Promise<Buffer>;
     generatePdfAsync(htmlStr: string): Promise<Buffer>;
-    generatePdfAsync(config: IPdfConfig): Promise<Buffer | void>;
+    generatePdfAsync(config: ICPdfConfig): Promise<Buffer | void>;
     destroyApp(): void;
 }
 declare var Cpdfy: ICpdfy;

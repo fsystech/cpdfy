@@ -1,7 +1,7 @@
 # cPDFY
 HTML to PDF converter with <a href="https://github.com/wkhtmltopdf/wkhtmltopdf">wkhtmltopdf</a> native library. Run on both ```Win/Linux``` operating system.<br/><br/>
 ```cPDFY``` is not a precompiled library. It will be compiled from source code in your machine.<br/>
-Before install ```cPDFY``` see ```node-gyp``` prerequisite from <a href="https://github.com/nodejs/node-gyp#node-gyp---nodejs-native-addon-build-tool">here</a><br/><br/>
+Before install `cPDFY` see `node-gyp` prerequisite from <a href="https://github.com/nodejs/node-gyp#node-gyp---nodejs-native-addon-build-tool">here</a><br/><br/>
 
 ## Windows prerequisite
 `npm install --global windows-build-tools`<br/><br/>
@@ -52,7 +52,37 @@ Cpdfy.createStream(file, html, (err) => {
     }
 });
 ```
-04# This example create `pdf` from `url` and write to `ServerResponse`
+04# This example create `pdf` from `string` with `ICPdfConfig` and write to `WriteStream`
+```javascript
+    const html = `
+    <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <title>Test PDF</title>
+        </head>
+        <body>
+            <h1 style="color:red;">Hello World....</h1>
+        </body>
+    </html>
+    `;
+    const file4 = fs.createWriteStream(path.resolve(`./test_output/4_test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+    Cpdfy.createStream(file4, {
+        global_settings: {
+            documentTitle: "This is printed copy",
+            orientation: "Landscape",
+            size: {
+                paperSize: "Legal"
+            },
+            margin: {
+                top: "1.27cm",
+                bottom: "1.27cm",
+                left: "1.27cm",
+                right: "1.27cm",
+            }
+        }
+    }, html);
+```
+05# This example create `pdf` from `url` and write to `ServerResponse`
 ```javascript
 controller.get('/pdf-test', (ctx, match) => {
     const url = help.mayBeString(ctx.req.query["url"]);
@@ -63,7 +93,7 @@ controller.get('/pdf-test', (ctx, match) => {
     Cpdfy.createStream(ctx.res, { from_url: decodeURIComponent(url) }, (err) => err && ctx.handleError(err, () => { }));
 });
 ```
-05# This example create `pdf` from `url` and write to `ServerResponse` with callback
+06# This example create `pdf` from `url` and write to `ServerResponse` with callback
 ```javascript
 controller.get('/pdf', (ctx, match) => {
     const url = help.mayBeString(ctx.req.query["url"]);

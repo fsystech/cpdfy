@@ -36,6 +36,32 @@ async function test() {
             console.log("Done...");
         }
     });
+    const zhtml = `<!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <title>Test PDF</title>
+    </head>
+    <BODY>
+        <h1 style="color:red;">Hello World....</h1>
+    </BODY>
+    </html>
+    `;
+    const file4 = fs.createWriteStream(path.resolve(`./test_output/4_test_${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`));
+    Cpdfy.createStream(file4, {
+        global_settings: {
+            documentTitle: "This is printed copy",
+            orientation: "Landscape",
+            size: {
+                paperSize: "Legal"
+            },
+            margin: {
+                top: "1.27cm",
+                bottom: "1.27cm",
+                left: "1.27cm",
+                right: "1.27cm",
+            }
+        }
+    }, zhtml);
     return;
     Cpdfy.generatePdf({ from_url: "https://wkhtmltopdf.org/", out_path: path.resolve('./from_url.pdf') });
     //await sleep(5);

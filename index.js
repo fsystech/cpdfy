@@ -8,7 +8,7 @@
 //By Rajib Chy
 // On 11:00 AM 12/25/2020
 /** 
- * @typedef {import('./index').IPdfConfig} IPdfConfig
+ * @typedef {import('./index').ICPdfConfig} ICPdfConfig
  */
 const path = require('path');
 const os = require("os");
@@ -64,24 +64,34 @@ const cpdfy = import_module();
         "footer.spacing": "0"
     }
 };*/
+/**
+ * To `String`
+ * @param {any} val
+ * @returns {string} 
+ */
+function toString(val) {
+    if (!val) return undefined;
+    if (typeof (val) === "string") return val;
+    return String(val);
+}
 function parseConfig(obj, outObj) {
     for (let prop in obj) {
         let next = obj[prop];
-        if (!next && typeof (next) === "object") {
+        if (next && typeof (next) === "object") {
             for (let nprop in next) {
-                outObj[`${prop}.${nprop}`] = String(next[nprop]);
+                outObj[`${prop}.${nprop}`] = toString(next[nprop]);
             }
         } else {
-            outObj[prop] = String(next);
+            outObj[prop] = toString(next);
         }
     }
 }
 /**
  * Create PDF Config
- * @param {IPdfConfig} config
+ * @param {ICPdfConfig} config
  */
 function prepareConfig(config) {
-    /** @type {IPdfConfig} */
+    /** @type {ICPdfConfig} */
     let outConfig = {};
     if (config.global_settings) {
         outConfig.global_settings = {};
@@ -111,7 +121,7 @@ function _setHeader(res) {
 /**
  * Write to Http Response
  * @param {Writable} res
- * @param {IPdfConfig} config 
+ * @param {ICPdfConfig} config 
  * @param {string} htmlStr
  * @param {(err?:Error)=>void} next
  * @param {()=>boolean} onOpen
@@ -151,7 +161,7 @@ function _pipeToWritableStream(res, config, htmlStr, next, onOpen) {
 /**
  * Write to Http Response
  * @param {Writable} res
- * @param {IPdfConfig} config 
+ * @param {ICPdfConfig} config 
  * @param {string} htmlStr
  * @param {(err?:Error)=>void} next
  * @returns {void} 
@@ -188,7 +198,7 @@ function _pipeStream(res, config, htmlStr, next) {
 class Cpdfy {
     /**
      * Generate PDF
-     * @param {IPdfConfig} config 
+     * @param {ICPdfConfig} config 
      * @param {string|void} htmlStr 
      */
     static generatePdf(config, htmlStr) {
@@ -213,7 +223,7 @@ class Cpdfy {
     }
     /**
      * Create or pip to ouput stream
-     * @param {IPdfConfig|ServerResponse|fs.WriteStream} config 
+     * @param {ICPdfConfig|ServerResponse|fs.WriteStream} config 
      * @param {string} htmlStr
      * @param {(err:Error, stream:fs.ReadStream)=>void} next
      * @returns {void} 
@@ -222,7 +232,7 @@ class Cpdfy {
         if (config instanceof ServerResponse || config instanceof fs.WriteStream) {
             return _pipeStream.apply(this, Array.prototype.slice.call(arguments));
         }
-        if (typeof (config) == "string") {
+        if (typeof (config) === "string") {
             if (typeof (htmlStr) === "function") {
                 next = htmlStr; htmlStr = undefined;
             }
@@ -232,6 +242,9 @@ class Cpdfy {
             next = htmlStr; htmlStr = undefined;
         } else if (typeof (htmlStr) !== "string") {
             htmlStr = undefined;
+        }
+        if (typeof (next) !== "function") {
+            throw new Error("Callback should be instance of `Function`.");
         }
         prepareConfig(config);
         config.out_path = path.resolve(`${os.tmpdir()}/${Math.floor((0x999 + Math.random()) * 0x10000000)}.pdf`);
