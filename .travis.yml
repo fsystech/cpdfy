@@ -16,12 +16,12 @@ cache:
   directories:
     - node_modules
 before_script:
-  - chown -R sow /usr/lib/
-  #- npm install nyc@latest --save-dev
-  #- npm install mocha@latest --save-dev
-  #- apt install make
-  #- apt install g++
-  #- apt install libfontconfig1 libxrender1
+  - echo "$USER"
+  - sudo apt-get update
+  - sudo chown -R $USER /usr/lib/
+  - sudo apt install make
+  - sudo apt install g++
+  - sudo apt install libfontconfig1 libxrender1
 install:
   - "npm install"
 script:
