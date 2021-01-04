@@ -3,7 +3,7 @@ os:
   - linux
 node_js:
   - '12'
-  - 'stable'
+  #- 'lts'
 dist: trusty
 addons:
   apt:
@@ -16,15 +16,14 @@ cache:
   directories:
     - node_modules
 before_script:
-  - echo "$USER"
   - sudo apt-get update
-  - sudo chown -R $USER /usr/lib/
   - sudo apt install make
   - sudo apt install g++
   - sudo apt install libfontconfig1 libxrender1
 install:
   - "npm install"
 script:
+  - sudo chown -R travis /usr/lib/
   # Run test script
   - node test
 git:
