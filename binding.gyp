@@ -58,7 +58,7 @@
                         "destination": "<(module_path)"
                     },{
                         "files": [
-                            "<!(node -e \"require('fs').existsSync('/usr/lib/libwkhtmltox.so.0') === true ? '' : console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0',require('process').arch);\")"
+                            "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0',require('process').arch);\")"
                         ],
                         "destination": "/usr/lib/"
                     }]

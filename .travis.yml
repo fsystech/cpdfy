@@ -1,9 +1,14 @@
 language: cpp
 os:
   - linux
-node_js:
-  - '12'
-  #- 'lts'
+env:
+  matrix:
+    - NODE_VERSION="12"
+before_install:
+  - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
+  - source ~/.nvm/nvm.sh
+  - nvm install $NODE_VERSION
+  - nvm use $NODE_VERSION
 dist: trusty
 addons:
   apt:
