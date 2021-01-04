@@ -4,21 +4,27 @@ os:
 node_js:
   - '12'
   - 'stable'
+dist: trusty
+addons:
+  apt:
+    packages:
+      - g++
+      - make
+      - libfontconfig1
+      - libxrender1
+cache:
+  directories:
+    - node_modules
 before_script:
   #- npm install nyc@latest --save-dev
   #- npm install mocha@latest --save-dev
-  - apt install make
-  - apt install g++
-  - apt install libfontconfig1 libxrender1
+  #- apt install make
+  #- apt install g++
+  #- apt install libfontconfig1 libxrender1
+install:
+  - "npm install"
 script:
-  # npm run test:mocha
-  # npm run lint
-  # Run install script
-  - npm install
   # Run test script
   - node test
 git:
   depth: 1
-cache:
-  directories:
-    - node_modules
