@@ -1,0 +1,25 @@
+language: node_js
+os:
+  - linux
+node_js:
+  - '12'
+  - 'stable'
+before_script:
+  #- npm install nyc@latest --save-dev
+  #- npm install mocha@latest --save-dev
+  - sudo apt install make
+  - sudo apt install g++
+  - sudo apt install libfontconfig1 libxrender1
+  - npm install socket.io --save-dev
+script:
+  # npm run test:mocha
+  # npm run lint
+  # Run install script
+  - npm install
+  # Run test script
+  - node test
+git:
+  depth: 1
+cache:
+  directories:
+    - node_modules
