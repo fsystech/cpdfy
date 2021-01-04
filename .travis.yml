@@ -7,10 +7,9 @@ node_js:
 before_script:
   #- npm install nyc@latest --save-dev
   #- npm install mocha@latest --save-dev
-  - sudo apt install make
-  - sudo apt install g++
-  - sudo apt install libfontconfig1 libxrender1
-  - npm install socket.io --save-dev
+  - apt install make
+  - apt install g++
+  - apt install libfontconfig1 libxrender1
 script:
   # npm run test:mocha
   # npm run lint
