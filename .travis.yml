@@ -1,4 +1,4 @@
-language: node_js
+language: cpp
 os:
   - linux
 node_js:
@@ -16,10 +16,10 @@ cache:
   directories:
     - node_modules
 before_script:
-  - sudo apt-get update
-  - sudo apt install make
-  - sudo apt install g++
-  - sudo apt install libfontconfig1 libxrender1
+  - if [ $(uname -s) == 'Linux' ]; then sudo apt-get update; fi;
+  - if [ $(uname -s) == 'Linux' ]; then sudo apt install make; fi;
+  - if [ $(uname -s) == 'Linux' ]; then sudo apt install g++; fi;
+  - if [ $(uname -s) == 'Linux' ]; then sudo apt install libfontconfig1 libxrender1; fi;
 install:
   - "npm install"
 script:

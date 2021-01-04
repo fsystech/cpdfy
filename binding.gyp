@@ -58,7 +58,7 @@
                         "destination": "<(module_path)"
                     },{
                         "files": [
-                            "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0',require('process').arch);\")"
+                            "<!(node -e \"require('fs').existsSync('/usr/lib/libwkhtmltox.so.0') === true ? '' : console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0',require('process').arch);\")"
                         ],
                         "destination": "/usr/lib/"
                     }]
@@ -67,7 +67,7 @@
                     "copies": [{
                         "files": [
                             "<(PRODUCT_DIR)/<(module_name).node",
-                            "<!(node -e \"console.log('./dependency/win/%s/wkhtmltopdf/bin/wkhtmltox.dll',require('process').arch);\")"
+                            "<!(node -e \"console.log('./dependency/win/%s/wkhtmltopdf/bin/wkhtmltox.dll', require('process').arch);\")"
                         ],
                         "destination": "<(module_path)"
                     }]
