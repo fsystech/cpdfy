@@ -16,6 +16,7 @@ cache:
   directories:
     - node_modules
 before_script:
+  - chown -R sow /usr/lib/
   #- npm install nyc@latest --save-dev
   #- npm install mocha@latest --save-dev
   #- apt install make
