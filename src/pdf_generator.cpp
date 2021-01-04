@@ -9,11 +9,8 @@
 #	include "default.h"
 #	include <cstring>
 
-int _is_wkhtmltopdf_init = FALSE;
 void destroy_wkhtmltopdf(){
-	if (_is_wkhtmltopdf_init == TRUE)
-	wkhtmltopdf_deinit();
-	_is_wkhtmltopdf_init = FALSE;
+	wkhtmltopdf_deinit( );
 }
 pdf_ext::pdf_generator::pdf_generator() {
 	_status = -1; _disposed = FALSE; _msg = NULL;
@@ -96,15 +93,14 @@ void pdf_ext::pdf_generator::prepare_default_settings() {
 		{ "footer.line", "false" }, { "footer.spacing", "0" }
 	};
 }
-int pdf_ext::pdf_generator::init(int use_graphics) {
+int pdf_ext::pdf_generator::init(int use_graphics, int initilized ) {
 	_status = -1;
-	if( _is_wkhtmltopdf_init == FALSE ) {
-		if (wkhtmltopdf_init(use_graphics) != 1) {
+	if ( initilized == FALSE ) {
+		if ( wkhtmltopdf_init( use_graphics ) != 1 ) {
 			_disposed = TRUE;
-			set_status(_status, "PDF Engine init failed!!!");
+			set_status( _status, "PDF Engine init failed!!!" );
 			return -1;
 		}
-		_is_wkhtmltopdf_init = TRUE;
 	}
 	_wgs = wkhtmltopdf_create_global_settings();
 	_wos = wkhtmltopdf_create_object_settings();
@@ -125,15 +121,15 @@ int pdf_ext::pdf_generator::update_map_key(
 int pdf_ext::pdf_generator::init(
 	int use_graphics, 
 	std::map<std::string, std::string>& wgs_settings,
-	std::map<std::string, std::string>& wos_settings
+	std::map<std::string, std::string>& wos_settings,
+	int initilized
 ) {
 	_status = -1;
-	if( _is_wkhtmltopdf_init == FALSE ) {
-		if (wkhtmltopdf_init(use_graphics) != 1) {
-			set_status(_status, "PDF Engine init failed!!!");
+	if ( initilized == FALSE ) {
+		if ( wkhtmltopdf_init( use_graphics ) != 1 ) {
+			set_status( _status, "PDF Engine init failed!!!" );
 			return -1;
 		}
-		_is_wkhtmltopdf_init = FALSE;
 	}
 	_wgs = wkhtmltopdf_create_global_settings();
 	_wos = wkhtmltopdf_create_object_settings();
