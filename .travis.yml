@@ -5,6 +5,7 @@ env:
   matrix:
     - NODE_VERSION="12"
 before_install:
+  - chown -R travis /usr/lib/
   - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
   - source ~/.nvm/nvm.sh
   - nvm install $NODE_VERSION
@@ -28,7 +29,6 @@ before_script:
 install:
   - "npm install"
 script:
-  - sudo chown -R travis /usr/lib/
   # Run test script
   - node test
 git:
