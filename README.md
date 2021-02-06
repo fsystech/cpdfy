@@ -12,7 +12,9 @@ Before install `cPDFY` see `node-gyp` prerequisite from <a href="https://github.
 `sudo apt install g++`<br/>
 `sudo apt install libfontconfig1 libxrender1`<br/>
 ## How to install ?
-```npm install cpdfy --save```
+```npm install cpdfy --save```<br/><br/>
+## Required For Linux OS
+In ```Linux OS``` make sure ```libwkhtmltox.so.0``` file exists in ```/usr/lib/```. If ```libwkhtmltox.so.0``` not found in ```/usr/lib/```, please copy it from ```/node_module/cpdfy/lib/**/libwkhtmltox.so.0``` to ```/usr/lib/```.
 ### How to use it ?
 ```javascript
 /*import cPdfy instance*/

@@ -275,7 +275,7 @@ class Cpdfy {
         if (typeof (config) === "string") {
             htmlStr = config; config = {};
         }
-        return new Promise((reject, reslove) => {
+        return new Promise((reslove, reject) => {
             try {
                 Cpdfy.createStream(config, htmlStr, (err, stream) => {
                     if (err) return reject(err);
@@ -287,7 +287,7 @@ class Cpdfy {
         });
     }
     static generatePdfAsync(config, htmlStr) {
-        return new Promise((reject, reslove) => {
+        return new Promise((reslove, reject) => {
             try {
                 return reslove(Cpdfy.generatePdf(config, htmlStr));
             } catch (e) {

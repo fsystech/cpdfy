@@ -54,13 +54,9 @@
                     "copies": [{
                         "files": [
                             "<(PRODUCT_DIR)/<(module_name).node",
-                        ],
-                        "destination": "<(module_path)"
-                    },{
-                        "files": [
                             "<!(node -e \"console.log('./dependency/linux/%s/wkhtmltopdf/lib/libwkhtmltox.so.0',require('process').arch);\")"
                         ],
-                        "destination": "/usr/lib/"
+                        "destination": "<(module_path)"
                     }]
                 }],
                 ['OS=="win"', {
