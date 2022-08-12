@@ -14,7 +14,7 @@
     "url": "git://github.com/safeonlineworld/cpdfy.git"
   },
   "homepage": "https://github.com/safeonlineworld/cpdfy#readme",
-  "license": "CC-BY-4.0",
+  "license": "MIT",
   "scripts": {
     "install": "node-pre-gyp install --build-from-source",
     "test": "node test.js",
